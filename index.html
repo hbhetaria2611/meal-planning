@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VegPlan India - Indian Vegetarian Meal Planner</title>
+    <title>Global Veggie Planner - Indian, Italian & Mexican Cuisine</title>
     <style>
         * {
             margin: 0;
@@ -64,6 +64,36 @@
             font-size: 1.2em;
             opacity: 0.9;
             margin-bottom: 20px;
+        }
+
+        .cuisine-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .cuisine-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cuisine-btn:hover, .cuisine-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: scale(1.05);
         }
 
         .week-selector {
@@ -491,6 +521,14 @@
             padding: 20px;
         }
 
+        .cuisine-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2em;
+            opacity: 0.7;
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -509,7 +547,7 @@
                 grid-template-columns: 1fr;
             }
             
-            .controls, .filter-buttons {
+            .controls, .filter-buttons, .cuisine-selector {
                 justify-content: center;
             }
         }
@@ -519,14 +557,28 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <h1>🍛 VegPlan India</h1>
-                <div class="tagline">Your Indian Vegetarian Meal Planner</div>
+                <h1>🌍 Global Veggie Planner</h1>
+                <div class="tagline">Authentic Vegetarian Recipes from Around the World</div>
+                
+                <div class="cuisine-selector">
+                    <button class="cuisine-btn active" data-cuisine="indian" onclick="switchCuisine('indian')">
+                        🇮🇳 Indian
+                    </button>
+                    <button class="cuisine-btn" data-cuisine="italian" onclick="switchCuisine('italian')">
+                        🇮🇹 Italian
+                    </button>
+                    <button class="cuisine-btn" data-cuisine="mexican" onclick="switchCuisine('mexican')">
+                        🇲🇽 Mexican
+                    </button>
+                </div>
+                
                 <div class="week-selector">
                     <button class="week-nav" onclick="changeWeek(-1)">◀ Previous</button>
                     <div class="current-week" id="currentWeek">Week of Jan 8 - Jan 14, 2024</div>
                     <button class="week-nav" onclick="changeWeek(1)">Next ▶</button>
                 </div>
             </div>
+            <div class="cuisine-indicator" id="cuisineIndicator">🇮🇳</div>
         </header>
 
         <div class="main-content">
@@ -546,7 +598,7 @@
             </div>
 
             <div class="dietary-filters">
-                <h3>🥗 Dietary Preferences</h3>
+                <h3 id="filtersTitle">🥗 Dietary Preferences</h3>
                 <div class="filter-buttons">
                     <button class="filter-btn active" data-filter="all" onclick="applyDietaryFilter('all')">All Recipes</button>
                     <button class="filter-btn" data-filter="vegan" onclick="applyDietaryFilter('vegan')">🌱 Vegan</button>
@@ -558,7 +610,7 @@
             </div>
 
             <div class="controls">
-                <button class="btn btn-primary" onclick="generateWeeklyPlan()">🌿 Generate Veg Weekly Plan</button>
+                <button class="btn btn-primary" onclick="generateWeeklyPlan()" id="generateBtn">🌿 Generate Weekly Plan</button>
                 <button class="btn btn-secondary" onclick="clearAllMeals()">🗑️ Clear All</button>
                 <button class="btn btn-primary" onclick="printMealPlan()">🖨️ Print Plan</button>
                 <button class="btn btn-secondary" onclick="saveMealPlan()">💾 Save Plan</button>
@@ -569,9 +621,9 @@
             </div>
 
             <div class="shopping-list">
-                <h3>🛒 Indian Grocery List</h3>
+                <h3 id="shoppingTitle">🛒 Grocery List</h3>
                 <div class="ingredients-grid" id="shoppingList">
-                    <div class="empty-state">Add Indian meals to generate your grocery list!</div>
+                    <div class="empty-state">Add meals to generate your grocery list!</div>
                 </div>
             </div>
         </div>
@@ -581,350 +633,452 @@
     <div id="recipeModal" class="recipe-modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <div class="modal-header">Choose an Indian Recipe</div>
+            <div class="modal-header" id="modalHeader">Choose a Recipe</div>
             <div class="recipe-list" id="recipeList">
                 <!-- Recipes will be populated here -->
             </div>
-            <input type="text" class="custom-meal" id="customMeal" placeholder="Or enter a custom Indian dish...">
+            <input type="text" class="custom-meal" id="customMeal" placeholder="Or enter a custom dish...">
             <button class="btn btn-primary" onclick="addCustomMeal()">Add Custom Meal</button>
         </div>
     </div>
 
     <script>
-        // Load the comprehensive Indian recipe database
+        // Load the comprehensive recipe database
         const recipeDatabase = {
-            "breakfast": {
-                "masala_dosa": {
-                    "name": "Masala Dosa",
-                    "description": "Crispy South Indian crepe filled with spiced potato curry",
-                    "prepTime": "30 minutes",
-                    "cookTime": "45 minutes",
-                    "difficulty": "Medium",
-                    "region": "South India",
-                    "ingredients": [
-                        {"item": "rice", "category": "grains"},
-                        {"item": "urad dal", "category": "lentils"},
-                        {"item": "chana dal", "category": "lentils"},
-                        {"item": "fenugreek seeds", "category": "spices"},
-                        {"item": "potatoes", "category": "vegetables"},
-                        {"item": "mustard seeds", "category": "spices"},
-                        {"item": "curry leaves", "category": "herbs"},
-                        {"item": "green chilies", "category": "spices"},
-                        {"item": "ginger", "category": "spices"},
-                        {"item": "turmeric powder", "category": "spices"},
-                        {"item": "salt", "category": "basic"},
-                        {"item": "oil", "category": "basic"}
-                    ],
-                    "calories": 320,
-                    "protein": "12g",
-                    "tags": ["gluten-free", "vegan", "fermented", "south-indian"]
+            "indian": {
+                "breakfast": {
+                    "masala_dosa": {
+                        "name": "Masala Dosa",
+                        "description": "Crispy South Indian crepe filled with spiced potato curry",
+                        "prepTime": "30 minutes",
+                        "cookTime": "45 minutes",
+                        "difficulty": "Medium",
+                        "region": "South India",
+                        "ingredients": [
+                            {"item": "rice", "category": "grains"},
+                            {"item": "urad dal", "category": "lentils"},
+                            {"item": "chana dal", "category": "lentils"},
+                            {"item": "fenugreek seeds", "category": "spices"},
+                            {"item": "potatoes", "category": "vegetables"},
+                            {"item": "mustard seeds", "category": "spices"},
+                            {"item": "curry leaves", "category": "herbs"},
+                            {"item": "green chilies", "category": "spices"},
+                            {"item": "ginger", "category": "spices"},
+                            {"item": "turmeric powder", "category": "spices"},
+                            {"item": "salt", "category": "basic"},
+                            {"item": "oil", "category": "basic"}
+                        ],
+                        "calories": 320,
+                        "protein": "12g",
+                        "tags": ["gluten-free", "vegan", "fermented", "south-indian"]
+                    },
+                    "poha": {
+                        "name": "Poha",
+                        "description": "Light and fluffy flattened rice breakfast with vegetables and spices",
+                        "prepTime": "10 minutes",
+                        "cookTime": "15 minutes",
+                        "difficulty": "Easy",
+                        "region": "West India",
+                        "ingredients": [
+                            {"item": "flattened rice", "category": "grains"},
+                            {"item": "onions", "category": "vegetables"},
+                            {"item": "green chilies", "category": "spices"},
+                            {"item": "ginger", "category": "spices"},
+                            {"item": "turmeric powder", "category": "spices"},
+                            {"item": "mustard seeds", "category": "spices"},
+                            {"item": "curry leaves", "category": "herbs"},
+                            {"item": "roasted peanuts", "category": "nuts"},
+                            {"item": "lemon juice", "category": "citrus"},
+                            {"item": "oil", "category": "basic"},
+                            {"item": "salt", "category": "basic"}
+                        ],
+                        "calories": 240,
+                        "protein": "6g",
+                        "tags": ["quick", "light", "gluten-free", "vegan"]
+                    },
+                    "upma": {
+                        "name": "Upma",
+                        "description": "Savory semolina porridge with vegetables and South Indian tempering",
+                        "prepTime": "10 minutes",
+                        "cookTime": "20 minutes",
+                        "difficulty": "Easy",
+                        "region": "South India",
+                        "ingredients": [
+                            {"item": "semolina", "category": "grains"},
+                            {"item": "onions", "category": "vegetables"},
+                            {"item": "green chilies", "category": "spices"},
+                            {"item": "ginger", "category": "spices"},
+                            {"item": "mustard seeds", "category": "spices"},
+                            {"item": "curry leaves", "category": "herbs"},
+                            {"item": "cashews", "category": "nuts"},
+                            {"item": "mixed vegetables", "category": "vegetables"},
+                            {"item": "water", "category": "basic"},
+                            {"item": "ghee", "category": "basic"},
+                            {"item": "salt", "category": "basic"}
+                        ],
+                        "calories": 280,
+                        "protein": "8g",
+                        "tags": ["comfort-food", "wholesome", "south-indian"]
+                    }
                 },
-                "poha": {
-                    "name": "Poha",
-                    "description": "Light and fluffy flattened rice breakfast with vegetables and spices",
-                    "prepTime": "10 minutes",
-                    "cookTime": "15 minutes",
-                    "difficulty": "Easy",
-                    "region": "West India",
-                    "ingredients": [
-                        {"item": "flattened rice", "category": "grains"},
-                        {"item": "onions", "category": "vegetables"},
-                        {"item": "green chilies", "category": "spices"},
-                        {"item": "ginger", "category": "spices"},
-                        {"item": "turmeric powder", "category": "spices"},
-                        {"item": "mustard seeds", "category": "spices"},
-                        {"item": "curry leaves", "category": "herbs"},
-                        {"item": "roasted peanuts", "category": "nuts"},
-                        {"item": "lemon juice", "category": "citrus"},
-                        {"item": "oil", "category": "basic"},
-                        {"item": "salt", "category": "basic"}
-                    ],
-                    "calories": 240,
-                    "protein": "6g",
-                    "tags": ["quick", "light", "gluten-free", "vegan"]
+                "lunch": {
+                    "rajma_chawal": {
+                        "name": "Rajma Chawal",
+                        "description": "Kidney beans curry served with fragrant basmati rice",
+                        "prepTime": "20 minutes",
+                        "cookTime": "60 minutes",
+                        "difficulty": "Medium",
+                        "region": "North India",
+                        "ingredients": [
+                            {"item": "kidney beans", "category": "legumes"},
+                            {"item": "basmati rice", "category": "grains"},
+                            {"item": "onions", "category": "vegetables"},
+                            {"item": "tomatoes", "category": "vegetables"},
+                            {"item": "ginger-garlic paste", "category": "spices"},
+                            {"item": "cumin seeds", "category": "spices"},
+                            {"item": "coriander powder", "category": "spices"},
+                            {"item": "garam masala", "category": "spices"},
+                            {"item": "red chili powder", "category": "spices"},
+                            {"item": "oil", "category": "basic"}
+                        ],
+                        "calories": 420,
+                        "protein": "18g",
+                        "tags": ["protein-rich", "comfort-food", "north-indian", "vegan"]
+                    },
+                    "dal_makhani": {
+                        "name": "Dal Makhani",
+                        "description": "Creamy black lentils slow-cooked with butter and cream",
+                        "prepTime": "25 minutes",
+                        "cookTime": "120 minutes",
+                        "difficulty": "Medium",
+                        "region": "North India",
+                        "ingredients": [
+                            {"item": "black lentils", "category": "lentils"},
+                            {"item": "kidney beans", "category": "legumes"},
+                            {"item": "butter", "category": "dairy"},
+                            {"item": "heavy cream", "category": "dairy"},
+                            {"item": "tomatoes", "category": "vegetables"},
+                            {"item": "ginger-garlic paste", "category": "spices"},
+                            {"item": "garam masala", "category": "spices"},
+                            {"item": "basmati rice", "category": "grains"},
+                            {"item": "naan bread", "category": "bread"}
+                        ],
+                        "calories": 520,
+                        "protein": "22g",
+                        "tags": ["creamy", "rich", "protein-rich", "restaurant-style"]
+                    }
                 },
-                "upma": {
-                    "name": "Upma",
-                    "description": "Savory semolina porridge with vegetables and South Indian tempering",
-                    "prepTime": "10 minutes",
-                    "cookTime": "20 minutes",
-                    "difficulty": "Easy",
-                    "region": "South India",
-                    "ingredients": [
-                        {"item": "semolina", "category": "grains"},
-                        {"item": "onions", "category": "vegetables"},
-                        {"item": "green chilies", "category": "spices"},
-                        {"item": "ginger", "category": "spices"},
-                        {"item": "mustard seeds", "category": "spices"},
-                        {"item": "curry leaves", "category": "herbs"},
-                        {"item": "cashews", "category": "nuts"},
-                        {"item": "mixed vegetables", "category": "vegetables"},
-                        {"item": "water", "category": "basic"},
-                        {"item": "ghee", "category": "basic"},
-                        {"item": "salt", "category": "basic"}
-                    ],
-                    "calories": 280,
-                    "protein": "8g",
-                    "tags": ["comfort-food", "wholesome", "south-indian"]
-                },
-                "aloo_paratha": {
-                    "name": "Aloo Paratha",
-                    "description": "Stuffed flatbread with spiced potato filling, served with yogurt and pickle",
-                    "prepTime": "30 minutes",
-                    "cookTime": "25 minutes",
-                    "difficulty": "Medium",
-                    "region": "North India",
-                    "ingredients": [
-                        {"item": "whole wheat flour", "category": "grains"},
-                        {"item": "potatoes", "category": "vegetables"},
-                        {"item": "green chilies", "category": "spices"},
-                        {"item": "ginger", "category": "spices"},
-                        {"item": "cumin seeds", "category": "spices"},
-                        {"item": "fresh coriander", "category": "herbs"},
-                        {"item": "ghee", "category": "basic"},
-                        {"item": "yogurt", "category": "dairy"},
-                        {"item": "salt", "category": "basic"}
-                    ],
-                    "calories": 350,
-                    "protein": "10g",
-                    "tags": ["stuffed-bread", "north-indian", "comfort-food"]
-                },
-                "idli_sambar": {
-                    "name": "Idli Sambar",
-                    "description": "Steamed rice cakes served with lentil curry and coconut chutney",
-                    "prepTime": "20 minutes",
-                    "cookTime": "40 minutes",
-                    "difficulty": "Medium",
-                    "region": "South India",
-                    "ingredients": [
-                        {"item": "idli rice", "category": "grains"},
-                        {"item": "urad dal", "category": "lentils"},
-                        {"item": "toor dal", "category": "lentils"},
-                        {"item": "sambar powder", "category": "spices"},
-                        {"item": "mixed vegetables", "category": "vegetables"},
-                        {"item": "tamarind paste", "category": "souring"},
-                        {"item": "curry leaves", "category": "herbs"},
-                        {"item": "coconut chutney", "category": "accompaniment"}
-                    ],
-                    "calories": 290,
-                    "protein": "14g",
-                    "tags": ["fermented", "steamed", "protein-rich", "south-indian"]
+                "dinner": {
+                    "palak_paneer": {
+                        "name": "Palak Paneer",
+                        "description": "Cottage cheese cubes in creamy spinach gravy",
+                        "prepTime": "15 minutes",
+                        "cookTime": "25 minutes",
+                        "difficulty": "Easy",
+                        "region": "North India",
+                        "ingredients": [
+                            {"item": "fresh spinach", "category": "vegetables"},
+                            {"item": "paneer", "category": "dairy"},
+                            {"item": "onions", "category": "vegetables"},
+                            {"item": "tomatoes", "category": "vegetables"},
+                            {"item": "ginger-garlic paste", "category": "spices"},
+                            {"item": "green chilies", "category": "spices"},
+                            {"item": "cream", "category": "dairy"},
+                            {"item": "garam masala", "category": "spices"},
+                            {"item": "roti", "category": "bread"},
+                            {"item": "rice", "category": "grains"}
+                        ],
+                        "calories": 340,
+                        "protein": "18g",
+                        "tags": ["healthy", "iron-rich", "creamy", "paneer"]
+                    },
+                    "chana_masala": {
+                        "name": "Chana Masala",
+                        "description": "Spicy chickpea curry with aromatic spices",
+                        "prepTime": "15 minutes",
+                        "cookTime": "35 minutes",
+                        "difficulty": "Easy",
+                        "region": "North India",
+                        "ingredients": [
+                            {"item": "chickpeas", "category": "legumes"},
+                            {"item": "onions", "category": "vegetables"},
+                            {"item": "tomatoes", "category": "vegetables"},
+                            {"item": "ginger-garlic paste", "category": "spices"},
+                            {"item": "cumin seeds", "category": "spices"},
+                            {"item": "coriander powder", "category": "spices"},
+                            {"item": "garam masala", "category": "spices"},
+                            {"item": "amchur powder", "category": "spices"},
+                            {"item": "chapati", "category": "bread"}
+                        ],
+                        "calories": 320,
+                        "protein": "16g",
+                        "tags": ["protein-rich", "vegan", "spicy", "fiber-rich"]
+                    }
                 }
             },
-            "lunch": {
-                "rajma_chawal": {
-                    "name": "Rajma Chawal",
-                    "description": "Kidney beans curry served with fragrant basmati rice",
-                    "prepTime": "20 minutes",
-                    "cookTime": "60 minutes",
-                    "difficulty": "Medium",
-                    "region": "North India",
-                    "ingredients": [
-                        {"item": "kidney beans", "category": "legumes"},
-                        {"item": "basmati rice", "category": "grains"},
-                        {"item": "roti", "category": "bread"}
-                    ],
-                    "calories": 460,
-                    "protein": "20g",
-                    "tags": ["rich", "creamy", "restaurant-style", "paneer"]
+            "italian": {
+                "breakfast": {
+                    "cappuccino_cornetto": {
+                        "name": "Cappuccino & Cornetto",
+                        "description": "Classic Italian breakfast with frothy coffee and sweet pastry",
+                        "prepTime": "10 minutes",
+                        "cookTime": "5 minutes",
+                        "difficulty": "Easy",
+                        "region": "Northern Italy",
+                        "ingredients": [
+                            {"item": "espresso coffee", "category": "beverages"},
+                            {"item": "whole milk", "category": "dairy"},
+                            {"item": "cornetto pastry", "category": "pastry"},
+                            {"item": "sugar", "category": "sweetener"}
+                        ],
+                        "calories": 280,
+                        "protein": "8g",
+                        "tags": ["quick", "traditional", "coffee", "pastry"]
+                    },
+                    "frittata_spinaci": {
+                        "name": "Frittata agli Spinaci",
+                        "description": "Italian spinach omelet baked to perfection with herbs",
+                        "prepTime": "15 minutes",
+                        "cookTime": "20 minutes",
+                        "difficulty": "Medium",
+                        "region": "Central Italy",
+                        "ingredients": [
+                            {"item": "fresh spinach", "category": "vegetables"},
+                            {"item": "eggs", "category": "dairy"},
+                            {"item": "pecorino cheese", "category": "cheese"},
+                            {"item": "extra virgin olive oil", "category": "oils"},
+                            {"item": "garlic", "category": "aromatics"},
+                            {"item": "fresh basil", "category": "herbs"},
+                            {"item": "salt", "category": "seasoning"},
+                            {"item": "black pepper", "category": "seasoning"}
+                        ],
+                        "calories": 220,
+                        "protein": "16g",
+                        "tags": ["protein-rich", "gluten-free", "iron-rich", "baked"]
+                    }
                 },
-                "vegetable_biryani": {
-                    "name": "Vegetable Biryani",
-                    "description": "Aromatic rice layered with spiced vegetables and saffron",
-                    "prepTime": "40 minutes",
-                    "cookTime": "60 minutes",
-                    "difficulty": "Hard",
-                    "region": "Hyderabad",
-                    "ingredients": [
-                        {"item": "basmati rice", "category": "grains"},
-                        {"item": "mixed vegetables", "category": "vegetables"},
-                        {"item": "yogurt", "category": "dairy"},
-                        {"item": "saffron", "category": "spices"},
-                        {"item": "biryani masala", "category": "spices"},
-                        {"item": "fried onions", "category": "garnish"},
-                        {"item": "mint leaves", "category": "herbs"},
-                        {"item": "coriander leaves", "category": "herbs"},
-                        {"item": "ghee", "category": "basic"}
-                    ],
-                    "calories": 380,
-                    "protein": "12g",
-                    "tags": ["aromatic", "festive", "layered", "saffron"]
+                "lunch": {
+                    "pasta_arrabbiata": {
+                        "name": "Pasta all'Arrabbiata",
+                        "description": "Spicy tomato pasta with garlic, chili, and fresh herbs",
+                        "prepTime": "10 minutes",
+                        "cookTime": "20 minutes",
+                        "difficulty": "Easy",
+                        "region": "Lazio",
+                        "ingredients": [
+                            {"item": "penne pasta", "category": "pasta"},
+                            {"item": "San Marzano tomatoes", "category": "vegetables"},
+                            {"item": "garlic", "category": "aromatics"},
+                            {"item": "red chili flakes", "category": "spices"},
+                            {"item": "extra virgin olive oil", "category": "oils"},
+                            {"item": "fresh parsley", "category": "herbs"},
+                            {"item": "sea salt", "category": "seasoning"},
+                            {"item": "pecorino romano", "category": "cheese"}
+                        ],
+                        "calories": 420,
+                        "protein": "14g",
+                        "tags": ["spicy", "vegan-option", "quick", "traditional"]
+                    },
+                    "risotto_funghi": {
+                        "name": "Risotto ai Funghi",
+                        "description": "Creamy mushroom risotto with porcini and fresh herbs",
+                        "prepTime": "20 minutes",
+                        "cookTime": "30 minutes",
+                        "difficulty": "Hard",
+                        "region": "Northern Italy",
+                        "ingredients": [
+                            {"item": "arborio rice", "category": "grains"},
+                            {"item": "mixed mushrooms", "category": "vegetables"},
+                            {"item": "vegetable stock", "category": "liquids"},
+                            {"item": "white wine", "category": "alcohol"},
+                            {"item": "onion", "category": "vegetables"},
+                            {"item": "parmesan cheese", "category": "cheese"},
+                            {"item": "butter", "category": "dairy"},
+                            {"item": "extra virgin olive oil", "category": "oils"},
+                            {"item": "fresh thyme", "category": "herbs"},
+                            {"item": "garlic", "category": "aromatics"}
+                        ],
+                        "calories": 480,
+                        "protein": "16g",
+                        "tags": ["creamy", "umami", "restaurant-style", "comfort-food"]
+                    }
+                },
+                "dinner": {
+                    "pizza_margherita": {
+                        "name": "Pizza Margherita",
+                        "description": "Classic Neapolitan pizza with tomato, mozzarella, and fresh basil",
+                        "prepTime": "120 minutes",
+                        "cookTime": "10 minutes",
+                        "difficulty": "Hard",
+                        "region": "Campania",
+                        "ingredients": [
+                            {"item": "pizza dough", "category": "dough"},
+                            {"item": "San Marzano tomatoes", "category": "vegetables"},
+                            {"item": "mozzarella di bufala", "category": "cheese"},
+                            {"item": "fresh basil", "category": "herbs"},
+                            {"item": "extra virgin olive oil", "category": "oils"},
+                            {"item": "sea salt", "category": "seasoning"},
+                            {"item": "semolina flour", "category": "grains"}
+                        ],
+                        "calories": 480,
+                        "protein": "20g",
+                        "tags": ["iconic", "neapolitan", "wood-fired", "artisanal"]
+                    }
                 }
             },
-            "dinner": {
-                "palak_paneer": {
-                    "name": "Palak Paneer",
-                    "description": "Cottage cheese cubes in creamy spinach gravy",
-                    "prepTime": "15 minutes",
-                    "cookTime": "25 minutes",
-                    "difficulty": "Easy",
-                    "region": "North India",
-                    "ingredients": [
-                        {"item": "fresh spinach", "category": "vegetables"},
-                        {"item": "paneer", "category": "dairy"},
-                        {"item": "onions", "category": "vegetables"},
-                        {"item": "tomatoes", "category": "vegetables"},
-                        {"item": "ginger-garlic paste", "category": "spices"},
-                        {"item": "green chilies", "category": "spices"},
-                        {"item": "cream", "category": "dairy"},
-                        {"item": "garam masala", "category": "spices"},
-                        {"item": "roti", "category": "bread"},
-                        {"item": "rice", "category": "grains"}
-                    ],
-                    "calories": 340,
-                    "protein": "18g",
-                    "tags": ["healthy", "iron-rich", "creamy", "paneer"]
+            "mexican": {
+                "breakfast": {
+                    "huevos_rancheros": {
+                        "name": "Huevos Rancheros",
+                        "description": "Fried eggs on tortillas with spicy salsa ranchera and beans",
+                        "prepTime": "15 minutes",
+                        "cookTime": "20 minutes",
+                        "difficulty": "Medium",
+                        "region": "Central Mexico",
+                        "ingredients": [
+                            {"item": "corn tortillas", "category": "bread"},
+                            {"item": "eggs", "category": "dairy"},
+                            {"item": "tomatoes", "category": "vegetables"},
+                            {"item": "jalapeño peppers", "category": "peppers"},
+                            {"item": "white onion", "category": "vegetables"},
+                            {"item": "garlic", "category": "aromatics"},
+                            {"item": "refried beans", "category": "legumes"},
+                            {"item": "queso fresco", "category": "cheese"},
+                            {"item": "avocado", "category": "fruits"},
+                            {"item": "cilantro", "category": "herbs"},
+                            {"item": "lime", "category": "citrus"},
+                            {"item": "vegetable oil", "category": "oils"}
+                        ],
+                        "calories": 520,
+                        "protein": "22g",
+                        "tags": ["hearty", "protein-rich", "spicy", "traditional"]
+                    },
+                    "molletes": {
+                        "name": "Molletes",
+                        "description": "Open-faced sandwich with refried beans, cheese, and pico de gallo",
+                        "prepTime": "15 minutes",
+                        "cookTime": "10 minutes",
+                        "difficulty": "Easy",
+                        "region": "Northern Mexico",
+                        "ingredients": [
+                            {"item": "bolillo bread", "category": "bread"},
+                            {"item": "refried beans", "category": "legumes"},
+                            {"item": "oaxaca cheese", "category": "cheese"},
+                            {"item": "tomatoes", "category": "vegetables"},
+                            {"item": "white onion", "category": "vegetables"},
+                            {"item": "jalapeño pepper", "category": "peppers"},
+                            {"item": "cilantro", "category": "herbs"},
+                            {"item": "lime juice", "category": "citrus"},
+                            {"item": "salt", "category": "seasoning"}
+                        ],
+                        "calories": 380,
+                        "protein": "18g",
+                        "tags": ["quick", "cheesy", "satisfying", "open-faced"]
+                    }
                 },
-                "chana_masala": {
-                    "name": "Chana Masala",
-                    "description": "Spicy chickpea curry with aromatic spices",
-                    "prepTime": "15 minutes",
-                    "cookTime": "35 minutes",
-                    "difficulty": "Easy",
-                    "region": "North India",
-                    "ingredients": [
-                        {"item": "chickpeas", "category": "legumes"},
-                        {"item": "onions", "category": "vegetables"},
-                        {"item": "tomatoes", "category": "vegetables"},
-                        {"item": "ginger-garlic paste", "category": "spices"},
-                        {"item": "cumin seeds", "category": "spices"},
-                        {"item": "coriander powder", "category": "spices"},
-                        {"item": "garam masala", "category": "spices"},
-                        {"item": "amchur powder", "category": "spices"},
-                        {"item": "chapati", "category": "bread"}
-                    ],
-                    "calories": 320,
-                    "protein": "16g",
-                    "tags": ["protein-rich", "vegan", "spicy", "fiber-rich"]
+                "lunch": {
+                    "quesadillas_hongos": {
+                        "name": "Quesadillas de Hongos",
+                        "description": "Flour tortillas filled with sautéed mushrooms and Oaxaca cheese",
+                        "prepTime": "20 minutes",
+                        "cookTime": "25 minutes",
+                        "difficulty": "Medium",
+                        "region": "Central Mexico",
+                        "ingredients": [
+                            {"item": "flour tortillas", "category": "bread"},
+                            {"item": "mixed mushrooms", "category": "vegetables"},
+                            {"item": "oaxaca cheese", "category": "cheese"},
+                            {"item": "white onion", "category": "vegetables"},
+                            {"item": "garlic", "category": "aromatics"},
+                            {"item": "epazote", "category": "herbs"},
+                            {"item": "vegetable oil", "category": "oils"},
+                            {"item": "salt", "category": "seasoning"},
+                            {"item": "salsa verde", "category": "sauces"},
+                            {"item": "Mexican crema", "category": "dairy"}
+                        ],
+                        "calories": 450,
+                        "protein": "20g",
+                        "tags": ["cheesy", "savory", "mushroom-rich", "griddled"]
+                    }
                 },
-                "aloo_gobi": {
-                    "name": "Aloo Gobi",
-                    "description": "Dry curry of potatoes and cauliflower with aromatic spices",
-                    "prepTime": "15 minutes",
-                    "cookTime": "25 minutes",
-                    "difficulty": "Easy",
-                    "region": "North India",
-                    "ingredients": [
-                        {"item": "potatoes", "category": "vegetables"},
-                        {"item": "cauliflower", "category": "vegetables"},
-                        {"item": "onions", "category": "vegetables"},
-                        {"item": "tomatoes", "category": "vegetables"},
-                        {"item": "ginger-garlic paste", "category": "spices"},
-                        {"item": "turmeric powder", "category": "spices"},
-                        {"item": "cumin seeds", "category": "spices"},
-                        {"item": "coriander powder", "category": "spices"},
-                        {"item": "garam masala", "category": "spices"},
-                        {"item": "roti", "category": "bread"}
-                    ],
-                    "calories": 240,
-                    "protein": "8g",
-                    "tags": ["dry-curry", "vegan", "comfort-food", "low-fat"]
-                },
-                "dal_tadka": {
-                    "name": "Dal Tadka",
-                    "description": "Yellow lentils with aromatic tempering of cumin and garlic",
-                    "prepTime": "10 minutes",
-                    "cookTime": "30 minutes",
-                    "difficulty": "Easy",
-                    "region": "Pan-Indian",
-                    "ingredients": [
-                        {"item": "yellow lentils", "category": "lentils"},
-                        {"item": "onions", "category": "vegetables"},
-                        {"item": "tomatoes", "category": "vegetables"},
-                        {"item": "ginger-garlic paste", "category": "spices"},
-                        {"item": "cumin seeds", "category": "spices"},
-                        {"item": "mustard seeds", "category": "spices"},
-                        {"item": "curry leaves", "category": "herbs"},
-                        {"item": "turmeric powder", "category": "spices"},
-                        {"item": "red chili powder", "category": "spices"},
-                        {"item": "basmati rice", "category": "grains"},
-                        {"item": "ghee", "category": "basic"}
-                    ],
-                    "calories": 310,
-                    "protein": "18g",
-                    "tags": ["protein-rich", "comfort-food", "everyday", "healthy"]
-                },
-                "baingan_bharta": {
-                    "name": "Baingan Bharta",
-                    "description": "Smoky roasted eggplant mash with onions, tomatoes and spices",
-                    "prepTime": "20 minutes",
-                    "cookTime": "40 minutes",
-                    "difficulty": "Medium",
-                    "region": "North India",
-                    "ingredients": [
-                        {"item": "large eggplant", "category": "vegetables"},
-                        {"item": "onions", "category": "vegetables"},
-                        {"item": "tomatoes", "category": "vegetables"},
-                        {"item": "green chilies", "category": "spices"},
-                        {"item": "ginger-garlic paste", "category": "spices"},
-                        {"item": "cumin seeds", "category": "spices"},
-                        {"item": "coriander powder", "category": "spices"},
-                        {"item": "garam masala", "category": "spices"},
-                        {"item": "fresh coriander", "category": "herbs"},
-                        {"item": "chapati", "category": "bread"}
-                    ],
-                    "calories": 180,
-                    "protein": "6g",
-                    "tags": ["smoky", "vegan", "low-calorie", "fiber-rich"]
-                },
-                "malai_kofta": {
-                    "name": "Malai Kofta",
-                    "description": "Fried paneer and potato dumplings in rich cashew-tomato gravy",
-                    "prepTime": "45 minutes",
-                    "cookTime": "35 minutes",
-                    "difficulty": "Hard",
-                    "region": "North India",
-                    "ingredients": [
-                        {"item": "paneer", "category": "dairy"},
-                        {"item": "potatoes", "category": "vegetables"},
-                        {"item": "cashews", "category": "nuts"},
-                        {"item": "tomatoes", "category": "vegetables"},
-                        {"item": "heavy cream", "category": "dairy"},
-                        {"item": "garam masala", "category": "spices"},
-                        {"item": "kasuri methi", "category": "herbs"},
-                        {"item": "cornstarch", "category": "binding"},
-                        {"item": "naan bread", "category": "bread"},
-                        {"item": "basmati rice", "category": "grains"},
-                        {"item": "oil", "category": "basic"}
-                    ],
-                    "calories": 520,
-                    "protein": "16g",
-                    "tags": ["rich", "festive", "restaurant-style", "indulgent"]
-                },
-                "bhindi_masala": {
-                    "name": "Bhindi Masala",
-                    "description": "Crispy okra curry with onions and aromatic spices",
-                    "prepTime": "15 minutes",
-                    "cookTime": "25 minutes",
-                    "difficulty": "Easy",
-                    "region": "North India",
-                    "ingredients": [
-                        {"item": "okra", "category": "vegetables"},
-                        {"item": "onions", "category": "vegetables"},
-                        {"item": "tomatoes", "category": "vegetables"},
-                        {"item": "ginger-garlic paste", "category": "spices"},
-                        {"item": "turmeric powder", "category": "spices"},
-                        {"item": "coriander powder", "category": "spices"},
-                        {"item": "cumin powder", "category": "spices"},
-                        {"item": "amchur powder", "category": "spices"},
-                        {"item": "red chili powder", "category": "spices"},
-                        {"item": "fresh coriander", "category": "herbs"},
-                        {"item": "roti", "category": "bread"}
-                    ],
-                    "calories": 220,
-                    "protein": "8g",
-                    "tags": ["crispy", "dry-curry", "vegan", "fiber-rich"]
+                "dinner": {
+                    "tacos_vegetarianos": {
+                        "name": "Tacos de Verduras Asadas",
+                        "description": "Grilled vegetable tacos with black beans and avocado crema",
+                        "prepTime": "25 minutes",
+                        "cookTime": "20 minutes",
+                        "difficulty": "Medium",
+                        "region": "Modern Mexican",
+                        "ingredients": [
+                            {"item": "corn tortillas", "category": "bread"},
+                            {"item": "zucchini", "category": "vegetables"},
+                            {"item": "bell peppers", "category": "vegetables"},
+                            {"item": "red onion", "category": "vegetables"},
+                            {"item": "black beans", "category": "legumes"},
+                            {"item": "avocados", "category": "fruits"},
+                            {"item": "lime juice", "category": "citrus"},
+                            {"item": "cilantro", "category": "herbs"},
+                            {"item": "cotija cheese", "category": "cheese"},
+                            {"item": "chipotle in adobo", "category": "peppers"},
+                            {"item": "olive oil", "category": "oils"}
+                        ],
+                        "calories": 420,
+                        "protein": "16g",
+                        "tags": ["grilled", "healthy", "fiber-rich", "colorful"]
+                    }
                 }
             }
         };
 
-        // Dietary filters based on the database
+        // Dietary filters by cuisine
         const dietaryFilters = {
-            "vegan": ["masala_dosa", "poha", "upma", "rajma_chawal", "chana_masala", "aloo_gobi", "dal_tadka", "baingan_bharta", "bhindi_masala"],
-            "gluten_free": ["masala_dosa", "poha", "idli_sambar", "rajma_chawal", "dal_tadka", "palak_paneer", "chana_masala", "aloo_gobi", "baingan_bharta"],
-            "high_protein": ["idli_sambar", "rajma_chawal", "chole_bhature", "dal_makhani", "paneer_butter_masala", "palak_paneer", "chana_masala", "dal_tadka"],
-            "low_calorie": ["poha", "upma", "dal_tadka", "aloo_gobi", "baingan_bharta", "bhindi_masala", "palak_paneer"],
-            "quick_meals": ["poha", "upma", "dal_tadka", "aloo_gobi", "bhindi_masala", "chana_masala"]
+            "vegan": {
+                "indian": ["masala_dosa", "poha", "upma", "rajma_chawal", "chana_masala"],
+                "italian": ["pasta_arrabbiata"],
+                "mexican": ["tacos_vegetarianos"]
+            },
+            "gluten_free": {
+                "indian": ["masala_dosa", "poha", "rajma_chawal", "palak_paneer", "chana_masala"],
+                "italian": ["frittata_spinaci"],
+                "mexican": ["huevos_rancheros", "quesadillas_hongos", "tacos_vegetarianos"]
+            },
+            "high_protein": {
+                "indian": ["rajma_chawal", "dal_makhani", "palak_paneer", "chana_masala"],
+                "italian": ["frittata_spinaci", "risotto_funghi"],
+                "mexican": ["huevos_rancheros", "molletes", "quesadillas_hongos"]
+            },
+            "low_calorie": {
+                "indian": ["poha", "upma", "chana_masala"],
+                "italian": ["frittata_spinaci"],
+                "mexican": ["tacos_vegetarianos"]
+            },
+            "quick_meals": {
+                "indian": ["poha", "upma", "chana_masala"],
+                "italian": ["pasta_arrabbiata", "cappuccino_cornetto"],
+                "mexican": ["molletes", "quesadillas_hongos", "tacos_vegetarianos"]
+            }
+        };
+
+        // Cuisine configuration
+        const cuisineConfig = {
+            "indian": {
+                "name": "Indian Vegetarian",
+                "flag": "🇮🇳",
+                "color": "#ff6b35",
+                "description": "Authentic vegetarian dishes from across India"
+            },
+            "italian": {
+                "name": "Italian Vegetarian", 
+                "flag": "🇮🇹",
+                "color": "#2d5016",
+                "description": "Classic Italian recipes with Mediterranean flavors"
+            },
+            "mexican": {
+                "name": "Mexican Vegetarian",
+                "flag": "🇲🇽", 
+                "color": "#c8102e",
+                "description": "Traditional Mexican vegetarian cuisine"
+            }
         };
 
         // State management
@@ -932,24 +1086,21 @@
         let mealPlan = {};
         let currentSlot = null;
         let currentDietaryFilter = 'all';
+        let selectedCuisine = 'indian';
 
-        // Helper functions to interact with the database
+        // Helper functions
         function getRecipesByCategory(category) {
-            return Object.values(recipeDatabase[category] || {});
-        }
-
-        function getRecipeById(category, id) {
-            return recipeDatabase[category]?.[id];
+            return Object.values(recipeDatabase[selectedCuisine][category] || {});
         }
 
         function getFilteredRecipes(category, filter) {
             const allRecipes = getRecipesByCategory(category);
             if (filter === 'all') return allRecipes;
             
-            const allowedIds = dietaryFilters[filter] || [];
+            const allowedIds = dietaryFilters[filter]?.[selectedCuisine] || [];
             return allRecipes.filter(recipe => {
-                const recipeId = Object.keys(recipeDatabase[category]).find(
-                    key => recipeDatabase[category][key].name === recipe.name
+                const recipeId = Object.keys(recipeDatabase[selectedCuisine][category]).find(
+                    key => recipeDatabase[selectedCuisine][category][key].name === recipe.name
                 );
                 return allowedIds.includes(recipeId);
             });
@@ -960,7 +1111,38 @@
             generateDays();
             updateWeekDisplay();
             updateStats();
+            updateUIForCuisine();
         });
+
+        function switchCuisine(cuisine) {
+            selectedCuisine = cuisine;
+            
+            // Update active cuisine button
+            document.querySelectorAll('.cuisine-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-cuisine="${cuisine}"]`).classList.add('active');
+            
+            // Clear current meal plan
+            mealPlan = {};
+            
+            // Regenerate meal grid
+            generateDays();
+            updateStats();
+            updateUIForCuisine();
+        }
+
+        function updateUIForCuisine() {
+            const config = cuisineConfig[selectedCuisine];
+            document.getElementById('cuisineIndicator').textContent = config.flag;
+            document.getElementById('generateBtn').innerHTML = `${config.flag} Generate ${config.name} Plan`;
+            document.getElementById('shoppingTitle').innerHTML = `🛒 ${config.name} Grocery List`;
+            document.getElementById('modalHeader').innerHTML = `Choose a ${config.name} Recipe`;
+            document.getElementById('filtersTitle').innerHTML = `🥗 Dietary Preferences (${config.name})`;
+            
+            // Update placeholder text
+            document.getElementById('customMeal').placeholder = `Or enter a custom ${selectedCuisine} dish...`;
+        }
 
         function generateDays() {
             const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -1156,11 +1338,11 @@
                             const category = typeof ingredient === 'object' ? ingredient.category : 'basic';
                             
                             // Categorize ingredients
-                            if (['spices', 'herbs'].includes(category)) {
+                            if (['spices', 'herbs', 'aromatics', 'seasoning', 'peppers'].includes(category)) {
                                 ingredientsByCategory['Spices & Seasonings'].add(item);
-                            } else if (['grains', 'lentils', 'legumes'].includes(category)) {
+                            } else if (['grains', 'lentils', 'legumes', 'pasta', 'bread', 'dough'].includes(category)) {
                                 ingredientsByCategory['Grains & Lentils'].add(item);
-                            } else if (['dairy', 'nuts', 'basic'].includes(category)) {
+                            } else if (['dairy', 'cheese', 'nuts', 'basic', 'oils', 'beverages', 'alcohol'].includes(category)) {
                                 ingredientsByCategory['Dairy & Others'].add(item);
                             } else {
                                 ingredientsByCategory['Vegetables & Fresh'].add(item);
@@ -1174,7 +1356,8 @@
             const totalIngredients = Object.values(ingredientsByCategory).reduce((total, set) => total + set.size, 0);
             
             if (totalIngredients === 0) {
-                shoppingList.innerHTML = '<div class="empty-state">Add Indian meals to generate your grocery list!</div>';
+                const config = cuisineConfig[selectedCuisine];
+                shoppingList.innerHTML = `<div class="empty-state">Add ${config.name.toLowerCase()} meals to generate your grocery list!</div>`;
             } else {
                 let html = '';
                 Object.entries(ingredientsByCategory).forEach(([category, itemsSet]) => {
@@ -1228,12 +1411,19 @@
         }
 
         function saveMealPlan() {
-            const dataStr = JSON.stringify(mealPlan, null, 2);
+            const config = cuisineConfig[selectedCuisine];
+            const dataStr = JSON.stringify({
+                cuisine: selectedCuisine,
+                cuisineName: config.name,
+                weekOffset: currentWeekOffset,
+                mealPlan: mealPlan,
+                generatedDate: new Date().toISOString()
+            }, null, 2);
             const dataBlob = new Blob([dataStr], {type: 'application/json'});
             const url = URL.createObjectURL(dataBlob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'indian-meal-plan.json';
+            link.download = `${selectedCuisine}-meal-plan.json`;
             link.click();
         }
 
@@ -1260,10 +1450,14 @@
         // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('recipeModal');
+            const recipeModal = document.getElementById('recipeDetailsModal');
             if (event.target === modal) {
                 closeModal();
+            }
+            if (event.target === recipeModal) {
+                closeRecipeDetails();
             }
         }
     </script>
 </body>
-</html>
+</html><!DOCTYPE html>
