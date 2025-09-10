@@ -1,1466 +1,428 @@
-            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Veggie Planner - Indian, Italian & Mexican Cuisine</title>
+    <title>VeggiPlan: Vegetarian Meal Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- This script tag links to your recipe database file -->
+    <script src="recipes.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc; /* Tailwind gray-100 */
         }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
+        /* Style for the element being dragged */
+        .dragging {
+            opacity: 0.5;
+            border: 2px dashed #fbbf24; /* Tailwind amber-400 */
         }
-
-        header {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .tagline {
-            font-size: 1.2em;
-            opacity: 0.9;
-            margin-bottom: 20px;
-        }
-
-        .cuisine-selector {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .cuisine-btn {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            font-weight: 600;
-            font-size: 1em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .cuisine-btn:hover, .cuisine-btn.active {
-            background: rgba(255,255,255,0.3);
-            border-color: rgba(255,255,255,0.5);
-            transform: scale(1.05);
-        }
-
-        .week-selector {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .week-nav {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .week-nav:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.05);
-        }
-
-        .current-week {
-            background: rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-        }
-
-        .main-content {
-            padding: 40px;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #ff7675, #d63031);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(214, 48, 49, 0.3);
-        }
-
-        .stat-number {
-            font-size: 2em;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .dietary-filters {
-            background: linear-gradient(135deg, #e8f5e8, #f0fff0);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: 1px solid #a8e6a8;
-        }
-
-        .dietary-filters h3 {
-            color: #2d3436;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border: 2px solid #00b894;
-            border-radius: 25px;
-            background: white;
-            color: #00b894;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 0.9em;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: #00b894;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 0.9em;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
-            color: #2d3436;
-            box-shadow: 0 4px 15px rgba(253, 203, 110, 0.4);
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(253, 203, 110, 0.6);
-        }
-
-        .meal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .day-card {
-            background: linear-gradient(135deg, #f8f9ff, #e8ecff);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(102, 126, 234, 0.1);
-        }
-
-        .day-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-        }
-
-        .day-header {
-            font-size: 1.3em;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #2d3436;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .meal-slot {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            border: 2px dashed #ddd;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            min-height: 80px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .meal-slot:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
-
-        .meal-slot.filled {
-            border: 2px solid #00b894;
-            background: linear-gradient(135deg, #00b894, #00a085);
-            color: white;
-            font-weight: 600;
-        }
-
-        .meal-slot.filled:hover {
-            background: linear-gradient(135deg, #00a085, #008f75);
-        }
-
-        .meal-label {
-            font-weight: 600;
-            color: #636e72;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .meal-name {
-            font-weight: 700;
-            font-size: 1.1em;
-            margin-bottom: 5px;
-        }
-
-        .meal-meta {
-            font-size: 0.85em;
-            opacity: 0.9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .recipe-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-
-        .modal-header {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #2d3436;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 30px;
-            cursor: pointer;
-            color: #636e72;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover {
-            color: #d63031;
-        }
-
-        .recipe-list {
-            display: grid;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .recipe-item {
-            padding: 20px;
-            background: #f8f9ff;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .recipe-item:hover {
-            background: #667eea;
-            color: white;
+        /* Style for the drop zone when dragging over it */
+        .drag-over {
+            background-color: #fef3c7; /* Tailwind amber-100 */
             transform: scale(1.02);
-            border-color: #667eea;
+            transition: transform 0.2s, background-color 0.2s;
         }
-
-        .recipe-item:hover .recipe-meta {
-            background: rgba(255,255,255,0.1);
+        /* Hide the scrollbar but keep it scrollable */
+        #recipe-list::-webkit-scrollbar {
+            width: 8px;
         }
-
-        .recipe-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin: 10px 0;
-            font-size: 0.85em;
-        }
-
-        .meta-item {
-            background: rgba(255,255,255,0.8);
-            padding: 5px 8px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        .meta-label {
-            font-weight: 600;
-            color: #636e72;
-            margin-bottom: 2px;
-            font-size: 0.8em;
-            text-transform: uppercase;
-        }
-
-        .meta-value {
-            color: #2d3436;
-            font-weight: 500;
-        }
-
-        .recipe-tags {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .tag {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.75em;
-            font-weight: 500;
-        }
-
-        .custom-meal {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
+        #recipe-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
             border-radius: 10px;
-            margin-bottom: 15px;
-            font-size: 1em;
-            transition: all 0.3s ease;
         }
-
-        .custom-meal:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        #recipe-list::-webkit-scrollbar-thumb {
+            background: #d1d5db; /* Tailwind gray-300 */
+            border-radius: 10px;
         }
-
-        .shopping-list {
-            background: linear-gradient(135deg, #fff9e6, #fff3cd);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 30px;
-            border: 1px solid #ffeaa7;
+        #recipe-list::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; /* Tailwind gray-400 */
         }
-
-        .shopping-list h3 {
-            color: #2d3436;
-            margin-bottom: 20px;
-            font-size: 1.4em;
-            text-align: center;
-            font-weight: 700;
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9);
         }
-
-        .ingredients-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms;
         }
-
-        .ingredient-item {
-            background: white;
-            padding: 10px 15px;
-            border-radius: 25px;
-            text-align: center;
-            border: 1px solid #fdcb6e;
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
         }
-
-        .ingredient-item:hover {
-            background: #fdcb6e;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .category-header {
-            grid-column: 1/-1;
-            font-weight: 700;
-            color: #667eea;
-            margin: 15px 0 10px 0;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 5px;
-            font-size: 1.1em;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #636e72;
-            font-style: italic;
-            padding: 20px;
-        }
-
-        .cuisine-indicator {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 2em;
-            opacity: 0.7;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 15px;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
-            
-            .main-content {
-                padding: 20px;
-            }
-            
-            .meal-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .controls, .filter-buttons, .cuisine-selector {
-                justify-content: center;
-            }
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 300ms, transform 300ms;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <div class="header-content">
-                <h1>🌍 Global Veggie Planner</h1>
-                <div class="tagline">Authentic Vegetarian Recipes from Around the World</div>
-                
-                <div class="cuisine-selector">
-                    <button class="cuisine-btn active" data-cuisine="indian" onclick="switchCuisine('indian')">
-                        🇮🇳 Indian
-                    </button>
-                    <button class="cuisine-btn" data-cuisine="italian" onclick="switchCuisine('italian')">
-                        🇮🇹 Italian
-                    </button>
-                    <button class="cuisine-btn" data-cuisine="mexican" onclick="switchCuisine('mexican')">
-                        🇲🇽 Mexican
-                    </button>
-                </div>
-                
-                <div class="week-selector">
-                    <button class="week-nav" onclick="changeWeek(-1)">◀ Previous</button>
-                    <div class="current-week" id="currentWeek">Week of Jan 8 - Jan 14, 2024</div>
-                    <button class="week-nav" onclick="changeWeek(1)">Next ▶</button>
-                </div>
-            </div>
-            <div class="cuisine-indicator" id="cuisineIndicator">🇮🇳</div>
+<body class="bg-gray-50">
+
+    <div class="container mx-auto p-4 lg:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl lg:text-5xl font-bold text-gray-800">VeggiPlan Meal Planner</h1>
+            <p class="text-gray-600 mt-2">Plan your vegetarian week with delicious Indian, Italian, Mexican, and Gujarati recipes!</p>
         </header>
 
-        <div class="main-content">
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number" id="plannedMeals">0</div>
-                    <div class="stat-label">Planned Meals</div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Weekly Planner Section -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg">
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                    <h2 class="text-2xl font-bold">Your Weekly Plan</h2>
+                    <div class="flex gap-2">
+                        <button id="generate-plan-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition-transform transform hover:scale-105">✨ Generate Random Plan</button>
+                        <button id="clear-plan-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-transform transform hover:scale-105">Clear Plan</button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalCalories">0</div>
-                    <div class="stat-label">Total Calories</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="shoppingItems">0</div>
-                    <div class="stat-label">Shopping Items</div>
-                </div>
-            </div>
-
-            <div class="dietary-filters">
-                <h3 id="filtersTitle">🥗 Dietary Preferences</h3>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all" onclick="applyDietaryFilter('all')">All Recipes</button>
-                    <button class="filter-btn" data-filter="vegan" onclick="applyDietaryFilter('vegan')">🌱 Vegan</button>
-                    <button class="filter-btn" data-filter="gluten_free" onclick="applyDietaryFilter('gluten_free')">🌾 Gluten-Free</button>
-                    <button class="filter-btn" data-filter="high_protein" onclick="applyDietaryFilter('high_protein')">💪 High Protein</button>
-                    <button class="filter-btn" data-filter="low_calorie" onclick="applyDietaryFilter('low_calorie')">⚖️ Low Calorie</button>
-                    <button class="filter-btn" data-filter="quick_meals" onclick="applyDietaryFilter('quick_meals')">⚡ Quick Meals</button>
+                <div id="weekly-planner" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                    <!-- Day columns will be generated by JS -->
                 </div>
             </div>
 
-            <div class="controls">
-                <button class="btn btn-primary" onclick="generateWeeklyPlan()" id="generateBtn">🌿 Generate Weekly Plan</button>
-                <button class="btn btn-secondary" onclick="clearAllMeals()">🗑️ Clear All</button>
-                <button class="btn btn-primary" onclick="printMealPlan()">🖨️ Print Plan</button>
-                <button class="btn btn-secondary" onclick="saveMealPlan()">💾 Save Plan</button>
-            </div>
-
-            <div class="meal-grid" id="mealGrid">
-                <!-- Days will be generated here -->
-            </div>
-
-            <div class="shopping-list">
-                <h3 id="shoppingTitle">🛒 Grocery List</h3>
-                <div class="ingredients-grid" id="shoppingList">
-                    <div class="empty-state">Add meals to generate your grocery list!</div>
+            <!-- Recipe Library Section -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">Recipe Library</h2>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button class="filter-btn bg-emerald-500 text-white px-4 py-2 rounded-full text-sm" data-cuisine="all">All</button>
+                    <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm" data-cuisine="Breakfast">Breakfast</button>
+                    <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm" data-cuisine="Indian">Indian</button>
+                    <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm" data-cuisine="Italian">Italian</button>
+                    <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm" data-cuisine="Mexican">Mexican</button>
+                    <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm" data-cuisine="Gujarati">Gujarati</button>
                 </div>
+                <div id="recipe-list" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                    <!-- Recipe cards will be generated by JS -->
+                </div>
+                <button id="add-recipe-btn" class="w-full mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105">+ Add New Recipe</button>
             </div>
         </div>
     </div>
 
-    <!-- Recipe Selection Modal -->
-    <div id="recipeModal" class="recipe-modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div class="modal-header" id="modalHeader">Choose a Recipe</div>
-            <div class="recipe-list" id="recipeList">
-                <!-- Recipes will be populated here -->
-            </div>
-            <input type="text" class="custom-meal" id="customMeal" placeholder="Or enter a custom dish...">
-            <button class="btn btn-primary" onclick="addCustomMeal()">Add Custom Meal</button>
+    <!-- Recipe Detail Modal -->
+    <div id="recipe-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div id="modal-content" class="modal-enter bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+             <!-- Content will be injected by JS -->
         </div>
     </div>
 
-    <script>
-        // Load the comprehensive recipe database
-        const recipeDatabase = {
-            "indian": {
-                "breakfast": {
-                    "masala_dosa": {
-                        "name": "Masala Dosa",
-                        "description": "Crispy South Indian crepe filled with spiced potato curry",
-                        "prepTime": "30 minutes",
-                        "cookTime": "45 minutes",
-                        "difficulty": "Medium",
-                        "region": "South India",
-                        "ingredients": [
-                            {"item": "rice", "category": "grains"},
-                            {"item": "urad dal", "category": "lentils"},
-                            {"item": "chana dal", "category": "lentils"},
-                            {"item": "fenugreek seeds", "category": "spices"},
-                            {"item": "potatoes", "category": "vegetables"},
-                            {"item": "mustard seeds", "category": "spices"},
-                            {"item": "curry leaves", "category": "herbs"},
-                            {"item": "green chilies", "category": "spices"},
-                            {"item": "ginger", "category": "spices"},
-                            {"item": "turmeric powder", "category": "spices"},
-                            {"item": "salt", "category": "basic"},
-                            {"item": "oil", "category": "basic"}
-                        ],
-                        "calories": 320,
-                        "protein": "12g",
-                        "tags": ["gluten-free", "vegan", "fermented", "south-indian"]
-                    },
-                    "poha": {
-                        "name": "Poha",
-                        "description": "Light and fluffy flattened rice breakfast with vegetables and spices",
-                        "prepTime": "10 minutes",
-                        "cookTime": "15 minutes",
-                        "difficulty": "Easy",
-                        "region": "West India",
-                        "ingredients": [
-                            {"item": "flattened rice", "category": "grains"},
-                            {"item": "onions", "category": "vegetables"},
-                            {"item": "green chilies", "category": "spices"},
-                            {"item": "ginger", "category": "spices"},
-                            {"item": "turmeric powder", "category": "spices"},
-                            {"item": "mustard seeds", "category": "spices"},
-                            {"item": "curry leaves", "category": "herbs"},
-                            {"item": "roasted peanuts", "category": "nuts"},
-                            {"item": "lemon juice", "category": "citrus"},
-                            {"item": "oil", "category": "basic"},
-                            {"item": "salt", "category": "basic"}
-                        ],
-                        "calories": 240,
-                        "protein": "6g",
-                        "tags": ["quick", "light", "gluten-free", "vegan"]
-                    },
-                    "upma": {
-                        "name": "Upma",
-                        "description": "Savory semolina porridge with vegetables and South Indian tempering",
-                        "prepTime": "10 minutes",
-                        "cookTime": "20 minutes",
-                        "difficulty": "Easy",
-                        "region": "South India",
-                        "ingredients": [
-                            {"item": "semolina", "category": "grains"},
-                            {"item": "onions", "category": "vegetables"},
-                            {"item": "green chilies", "category": "spices"},
-                            {"item": "ginger", "category": "spices"},
-                            {"item": "mustard seeds", "category": "spices"},
-                            {"item": "curry leaves", "category": "herbs"},
-                            {"item": "cashews", "category": "nuts"},
-                            {"item": "mixed vegetables", "category": "vegetables"},
-                            {"item": "water", "category": "basic"},
-                            {"item": "ghee", "category": "basic"},
-                            {"item": "salt", "category": "basic"}
-                        ],
-                        "calories": 280,
-                        "protein": "8g",
-                        "tags": ["comfort-food", "wholesome", "south-indian"]
-                    }
-                },
-                "lunch": {
-                    "rajma_chawal": {
-                        "name": "Rajma Chawal",
-                        "description": "Kidney beans curry served with fragrant basmati rice",
-                        "prepTime": "20 minutes",
-                        "cookTime": "60 minutes",
-                        "difficulty": "Medium",
-                        "region": "North India",
-                        "ingredients": [
-                            {"item": "kidney beans", "category": "legumes"},
-                            {"item": "basmati rice", "category": "grains"},
-                            {"item": "onions", "category": "vegetables"},
-                            {"item": "tomatoes", "category": "vegetables"},
-                            {"item": "ginger-garlic paste", "category": "spices"},
-                            {"item": "cumin seeds", "category": "spices"},
-                            {"item": "coriander powder", "category": "spices"},
-                            {"item": "garam masala", "category": "spices"},
-                            {"item": "red chili powder", "category": "spices"},
-                            {"item": "oil", "category": "basic"}
-                        ],
-                        "calories": 420,
-                        "protein": "18g",
-                        "tags": ["protein-rich", "comfort-food", "north-indian", "vegan"]
-                    },
-                    "dal_makhani": {
-                        "name": "Dal Makhani",
-                        "description": "Creamy black lentils slow-cooked with butter and cream",
-                        "prepTime": "25 minutes",
-                        "cookTime": "120 minutes",
-                        "difficulty": "Medium",
-                        "region": "North India",
-                        "ingredients": [
-                            {"item": "black lentils", "category": "lentils"},
-                            {"item": "kidney beans", "category": "legumes"},
-                            {"item": "butter", "category": "dairy"},
-                            {"item": "heavy cream", "category": "dairy"},
-                            {"item": "tomatoes", "category": "vegetables"},
-                            {"item": "ginger-garlic paste", "category": "spices"},
-                            {"item": "garam masala", "category": "spices"},
-                            {"item": "basmati rice", "category": "grains"},
-                            {"item": "naan bread", "category": "bread"}
-                        ],
-                        "calories": 520,
-                        "protein": "22g",
-                        "tags": ["creamy", "rich", "protein-rich", "restaurant-style"]
-                    }
-                },
-                "dinner": {
-                    "palak_paneer": {
-                        "name": "Palak Paneer",
-                        "description": "Cottage cheese cubes in creamy spinach gravy",
-                        "prepTime": "15 minutes",
-                        "cookTime": "25 minutes",
-                        "difficulty": "Easy",
-                        "region": "North India",
-                        "ingredients": [
-                            {"item": "fresh spinach", "category": "vegetables"},
-                            {"item": "paneer", "category": "dairy"},
-                            {"item": "onions", "category": "vegetables"},
-                            {"item": "tomatoes", "category": "vegetables"},
-                            {"item": "ginger-garlic paste", "category": "spices"},
-                            {"item": "green chilies", "category": "spices"},
-                            {"item": "cream", "category": "dairy"},
-                            {"item": "garam masala", "category": "spices"},
-                            {"item": "roti", "category": "bread"},
-                            {"item": "rice", "category": "grains"}
-                        ],
-                        "calories": 340,
-                        "protein": "18g",
-                        "tags": ["healthy", "iron-rich", "creamy", "paneer"]
-                    },
-                    "chana_masala": {
-                        "name": "Chana Masala",
-                        "description": "Spicy chickpea curry with aromatic spices",
-                        "prepTime": "15 minutes",
-                        "cookTime": "35 minutes",
-                        "difficulty": "Easy",
-                        "region": "North India",
-                        "ingredients": [
-                            {"item": "chickpeas", "category": "legumes"},
-                            {"item": "onions", "category": "vegetables"},
-                            {"item": "tomatoes", "category": "vegetables"},
-                            {"item": "ginger-garlic paste", "category": "spices"},
-                            {"item": "cumin seeds", "category": "spices"},
-                            {"item": "coriander powder", "category": "spices"},
-                            {"item": "garam masala", "category": "spices"},
-                            {"item": "amchur powder", "category": "spices"},
-                            {"item": "chapati", "category": "bread"}
-                        ],
-                        "calories": 320,
-                        "protein": "16g",
-                        "tags": ["protein-rich", "vegan", "spicy", "fiber-rich"]
-                    }
-                }
-            },
-            "italian": {
-                "breakfast": {
-                    "cappuccino_cornetto": {
-                        "name": "Cappuccino & Cornetto",
-                        "description": "Classic Italian breakfast with frothy coffee and sweet pastry",
-                        "prepTime": "10 minutes",
-                        "cookTime": "5 minutes",
-                        "difficulty": "Easy",
-                        "region": "Northern Italy",
-                        "ingredients": [
-                            {"item": "espresso coffee", "category": "beverages"},
-                            {"item": "whole milk", "category": "dairy"},
-                            {"item": "cornetto pastry", "category": "pastry"},
-                            {"item": "sugar", "category": "sweetener"}
-                        ],
-                        "calories": 280,
-                        "protein": "8g",
-                        "tags": ["quick", "traditional", "coffee", "pastry"]
-                    },
-                    "frittata_spinaci": {
-                        "name": "Frittata agli Spinaci",
-                        "description": "Italian spinach omelet baked to perfection with herbs",
-                        "prepTime": "15 minutes",
-                        "cookTime": "20 minutes",
-                        "difficulty": "Medium",
-                        "region": "Central Italy",
-                        "ingredients": [
-                            {"item": "fresh spinach", "category": "vegetables"},
-                            {"item": "eggs", "category": "dairy"},
-                            {"item": "pecorino cheese", "category": "cheese"},
-                            {"item": "extra virgin olive oil", "category": "oils"},
-                            {"item": "garlic", "category": "aromatics"},
-                            {"item": "fresh basil", "category": "herbs"},
-                            {"item": "salt", "category": "seasoning"},
-                            {"item": "black pepper", "category": "seasoning"}
-                        ],
-                        "calories": 220,
-                        "protein": "16g",
-                        "tags": ["protein-rich", "gluten-free", "iron-rich", "baked"]
-                    }
-                },
-                "lunch": {
-                    "pasta_arrabbiata": {
-                        "name": "Pasta all'Arrabbiata",
-                        "description": "Spicy tomato pasta with garlic, chili, and fresh herbs",
-                        "prepTime": "10 minutes",
-                        "cookTime": "20 minutes",
-                        "difficulty": "Easy",
-                        "region": "Lazio",
-                        "ingredients": [
-                            {"item": "penne pasta", "category": "pasta"},
-                            {"item": "San Marzano tomatoes", "category": "vegetables"},
-                            {"item": "garlic", "category": "aromatics"},
-                            {"item": "red chili flakes", "category": "spices"},
-                            {"item": "extra virgin olive oil", "category": "oils"},
-                            {"item": "fresh parsley", "category": "herbs"},
-                            {"item": "sea salt", "category": "seasoning"},
-                            {"item": "pecorino romano", "category": "cheese"}
-                        ],
-                        "calories": 420,
-                        "protein": "14g",
-                        "tags": ["spicy", "vegan-option", "quick", "traditional"]
-                    },
-                    "risotto_funghi": {
-                        "name": "Risotto ai Funghi",
-                        "description": "Creamy mushroom risotto with porcini and fresh herbs",
-                        "prepTime": "20 minutes",
-                        "cookTime": "30 minutes",
-                        "difficulty": "Hard",
-                        "region": "Northern Italy",
-                        "ingredients": [
-                            {"item": "arborio rice", "category": "grains"},
-                            {"item": "mixed mushrooms", "category": "vegetables"},
-                            {"item": "vegetable stock", "category": "liquids"},
-                            {"item": "white wine", "category": "alcohol"},
-                            {"item": "onion", "category": "vegetables"},
-                            {"item": "parmesan cheese", "category": "cheese"},
-                            {"item": "butter", "category": "dairy"},
-                            {"item": "extra virgin olive oil", "category": "oils"},
-                            {"item": "fresh thyme", "category": "herbs"},
-                            {"item": "garlic", "category": "aromatics"}
-                        ],
-                        "calories": 480,
-                        "protein": "16g",
-                        "tags": ["creamy", "umami", "restaurant-style", "comfort-food"]
-                    }
-                },
-                "dinner": {
-                    "pizza_margherita": {
-                        "name": "Pizza Margherita",
-                        "description": "Classic Neapolitan pizza with tomato, mozzarella, and fresh basil",
-                        "prepTime": "120 minutes",
-                        "cookTime": "10 minutes",
-                        "difficulty": "Hard",
-                        "region": "Campania",
-                        "ingredients": [
-                            {"item": "pizza dough", "category": "dough"},
-                            {"item": "San Marzano tomatoes", "category": "vegetables"},
-                            {"item": "mozzarella di bufala", "category": "cheese"},
-                            {"item": "fresh basil", "category": "herbs"},
-                            {"item": "extra virgin olive oil", "category": "oils"},
-                            {"item": "sea salt", "category": "seasoning"},
-                            {"item": "semolina flour", "category": "grains"}
-                        ],
-                        "calories": 480,
-                        "protein": "20g",
-                        "tags": ["iconic", "neapolitan", "wood-fired", "artisanal"]
-                    }
-                }
-            },
-            "mexican": {
-                "breakfast": {
-                    "huevos_rancheros": {
-                        "name": "Huevos Rancheros",
-                        "description": "Fried eggs on tortillas with spicy salsa ranchera and beans",
-                        "prepTime": "15 minutes",
-                        "cookTime": "20 minutes",
-                        "difficulty": "Medium",
-                        "region": "Central Mexico",
-                        "ingredients": [
-                            {"item": "corn tortillas", "category": "bread"},
-                            {"item": "eggs", "category": "dairy"},
-                            {"item": "tomatoes", "category": "vegetables"},
-                            {"item": "jalapeño peppers", "category": "peppers"},
-                            {"item": "white onion", "category": "vegetables"},
-                            {"item": "garlic", "category": "aromatics"},
-                            {"item": "refried beans", "category": "legumes"},
-                            {"item": "queso fresco", "category": "cheese"},
-                            {"item": "avocado", "category": "fruits"},
-                            {"item": "cilantro", "category": "herbs"},
-                            {"item": "lime", "category": "citrus"},
-                            {"item": "vegetable oil", "category": "oils"}
-                        ],
-                        "calories": 520,
-                        "protein": "22g",
-                        "tags": ["hearty", "protein-rich", "spicy", "traditional"]
-                    },
-                    "molletes": {
-                        "name": "Molletes",
-                        "description": "Open-faced sandwich with refried beans, cheese, and pico de gallo",
-                        "prepTime": "15 minutes",
-                        "cookTime": "10 minutes",
-                        "difficulty": "Easy",
-                        "region": "Northern Mexico",
-                        "ingredients": [
-                            {"item": "bolillo bread", "category": "bread"},
-                            {"item": "refried beans", "category": "legumes"},
-                            {"item": "oaxaca cheese", "category": "cheese"},
-                            {"item": "tomatoes", "category": "vegetables"},
-                            {"item": "white onion", "category": "vegetables"},
-                            {"item": "jalapeño pepper", "category": "peppers"},
-                            {"item": "cilantro", "category": "herbs"},
-                            {"item": "lime juice", "category": "citrus"},
-                            {"item": "salt", "category": "seasoning"}
-                        ],
-                        "calories": 380,
-                        "protein": "18g",
-                        "tags": ["quick", "cheesy", "satisfying", "open-faced"]
-                    }
-                },
-                "lunch": {
-                    "quesadillas_hongos": {
-                        "name": "Quesadillas de Hongos",
-                        "description": "Flour tortillas filled with sautéed mushrooms and Oaxaca cheese",
-                        "prepTime": "20 minutes",
-                        "cookTime": "25 minutes",
-                        "difficulty": "Medium",
-                        "region": "Central Mexico",
-                        "ingredients": [
-                            {"item": "flour tortillas", "category": "bread"},
-                            {"item": "mixed mushrooms", "category": "vegetables"},
-                            {"item": "oaxaca cheese", "category": "cheese"},
-                            {"item": "white onion", "category": "vegetables"},
-                            {"item": "garlic", "category": "aromatics"},
-                            {"item": "epazote", "category": "herbs"},
-                            {"item": "vegetable oil", "category": "oils"},
-                            {"item": "salt", "category": "seasoning"},
-                            {"item": "salsa verde", "category": "sauces"},
-                            {"item": "Mexican crema", "category": "dairy"}
-                        ],
-                        "calories": 450,
-                        "protein": "20g",
-                        "tags": ["cheesy", "savory", "mushroom-rich", "griddled"]
-                    }
-                },
-                "dinner": {
-                    "tacos_vegetarianos": {
-                        "name": "Tacos de Verduras Asadas",
-                        "description": "Grilled vegetable tacos with black beans and avocado crema",
-                        "prepTime": "25 minutes",
-                        "cookTime": "20 minutes",
-                        "difficulty": "Medium",
-                        "region": "Modern Mexican",
-                        "ingredients": [
-                            {"item": "corn tortillas", "category": "bread"},
-                            {"item": "zucchini", "category": "vegetables"},
-                            {"item": "bell peppers", "category": "vegetables"},
-                            {"item": "red onion", "category": "vegetables"},
-                            {"item": "black beans", "category": "legumes"},
-                            {"item": "avocados", "category": "fruits"},
-                            {"item": "lime juice", "category": "citrus"},
-                            {"item": "cilantro", "category": "herbs"},
-                            {"item": "cotija cheese", "category": "cheese"},
-                            {"item": "chipotle in adobo", "category": "peppers"},
-                            {"item": "olive oil", "category": "oils"}
-                        ],
-                        "calories": 420,
-                        "protein": "16g",
-                        "tags": ["grilled", "healthy", "fiber-rich", "colorful"]
-                    }
-                }
-            }
-        };
+    <!-- Add Recipe Modal -->
+    <div id="add-recipe-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="modal-content transform scale-95 bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-2xl font-bold">Add a New Recipe</h3>
+                <button id="add-modal-close-btn" class="text-3xl font-light text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <form id="add-recipe-form" class="p-6 space-y-4">
+                <input type="text" name="name" placeholder="Recipe Name" class="w-full p-3 border rounded-lg" required>
+                <select name="cuisine" class="w-full p-3 border rounded-lg" required>
+                    <option value="" disabled selected>Select Cuisine</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Gujarati">Gujarati</option>
+                </select>
+                <textarea name="description" placeholder="Short description" class="w-full p-3 border rounded-lg" rows="2" required></textarea>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" name="prepTime" placeholder="Prep time (mins)" class="w-full p-3 border rounded-lg" required>
+                    <input type="number" name="cookTime" placeholder="Cook time (mins)" class="w-full p-3 border rounded-lg" required>
+                </div>
+                <textarea name="ingredients" placeholder="Ingredients (one per line)" class="w-full p-3 border rounded-lg" rows="5" required></textarea>
+                <textarea name="instructions" placeholder="Instructions (use '1. Step one...' format)" class="w-full p-3 border rounded-lg" rows="6" required></textarea>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg">Save Recipe</button>
+            </form>
+        </div>
+    </div>
 
-        // Dietary filters by cuisine
-        const dietaryFilters = {
-            "vegan": {
-                "indian": ["masala_dosa", "poha", "upma", "rajma_chawal", "chana_masala"],
-                "italian": ["pasta_arrabbiata"],
-                "mexican": ["tacos_vegetarianos"]
-            },
-            "gluten_free": {
-                "indian": ["masala_dosa", "poha", "rajma_chawal", "palak_paneer", "chana_masala"],
-                "italian": ["frittata_spinaci"],
-                "mexican": ["huevos_rancheros", "quesadillas_hongos", "tacos_vegetarianos"]
-            },
-            "high_protein": {
-                "indian": ["rajma_chawal", "dal_makhani", "palak_paneer", "chana_masala"],
-                "italian": ["frittata_spinaci", "risotto_funghi"],
-                "mexican": ["huevos_rancheros", "molletes", "quesadillas_hongos"]
-            },
-            "low_calorie": {
-                "indian": ["poha", "upma", "chana_masala"],
-                "italian": ["frittata_spinaci"],
-                "mexican": ["tacos_vegetarianos"]
-            },
-            "quick_meals": {
-                "indian": ["poha", "upma", "chana_masala"],
-                "italian": ["pasta_arrabbiata", "cappuccino_cornetto"],
-                "mexican": ["molletes", "quesadillas_hongos", "tacos_vegetarianos"]
-            }
-        };
 
-        // Cuisine configuration
-        const cuisineConfig = {
-            "indian": {
-                "name": "Indian Vegetarian",
-                "flag": "🇮🇳",
-                "color": "#ff6b35",
-                "description": "Authentic vegetarian dishes from across India"
-            },
-            "italian": {
-                "name": "Italian Vegetarian", 
-                "flag": "🇮🇹",
-                "color": "#2d5016",
-                "description": "Classic Italian recipes with Mediterranean flavors"
-            },
-            "mexican": {
-                "name": "Mexican Vegetarian",
-                "flag": "🇲🇽", 
-                "color": "#c8102e",
-                "description": "Traditional Mexican vegetarian cuisine"
-            }
-        };
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Defensively check if initialRecipes was loaded from the script file.
+    // If not, initialize as an empty array to prevent a crash.
+    if (typeof initialRecipes === 'undefined') {
+        console.error("Warning: The `recipes.js` file could not be found or is empty. Pre-defined recipes will not be loaded.");
+        var initialRecipes = []; // Define it to avoid a ReferenceError
+    }
 
-        // State management
-        let currentWeekOffset = 0;
-        let mealPlan = {};
-        let currentSlot = null;
-        let currentDietaryFilter = 'all';
-        let selectedCuisine = 'indian';
+    // Combine initial recipes with recipes from local storage
+    let allRecipes = [...initialRecipes, ...loadRecipesFromLocalStorage()];
 
-        // Helper functions
-        function getRecipesByCategory(category) {
-            return Object.values(recipeDatabase[selectedCuisine][category] || {});
-        }
+    const recipeList = document.getElementById('recipe-list');
+    const weeklyPlanner = document.getElementById('weekly-planner');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const generatePlanBtn = document.getElementById('generate-plan-btn');
+    const clearPlanBtn = document.getElementById('clear-plan-btn');
+    
+    // Modals
+    const recipeModal = document.getElementById('recipe-modal');
+    const modalContent = document.getElementById('modal-content');
+    const addRecipeModal = document.getElementById('add-recipe-modal');
+    const addRecipeBtn = document.getElementById('add-recipe-btn');
+    const addModalCloseBtn = document.getElementById('add-modal-close-btn');
+    const addRecipeForm = document.getElementById('add-recipe-form');
 
-        function getFilteredRecipes(category, filter) {
-            const allRecipes = getRecipesByCategory(category);
-            if (filter === 'all') return allRecipes;
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    let weeklyPlan = loadPlanFromLocalStorage() || {};
+
+    function saveRecipesToLocalStorage(recipes) {
+        const userRecipes = recipes.filter(r => r.id > 1000); // Only save user-added recipes
+        localStorage.setItem('mealPlannerUserRecipes', JSON.stringify(userRecipes));
+    }
+
+    function loadRecipesFromLocalStorage() {
+        return JSON.parse(localStorage.getItem('mealPlannerUserRecipes')) || [];
+    }
+
+    function savePlanToLocalStorage() {
+        localStorage.setItem('mealPlannerPlan', JSON.stringify(weeklyPlan));
+    }
+
+    function loadPlanFromLocalStorage() {
+        return JSON.parse(localStorage.getItem('mealPlannerPlan'));
+    }
+
+    function renderRecipes(filter = 'all') {
+        recipeList.innerHTML = '';
+        const filteredRecipes = filter === 'all' ? allRecipes : allRecipes.filter(recipe => recipe.cuisine === filter);
+        
+        filteredRecipes.forEach(recipe => {
+            const recipeCard = document.createElement('div');
+            recipeCard.className = 'p-4 border rounded-lg flex gap-4 items-center bg-white shadow-sm cursor-grab active:cursor-grabbing';
+            recipeCard.setAttribute('draggable', 'true');
+            recipeCard.dataset.recipeId = recipe.id;
             
-            const allowedIds = dietaryFilters[filter]?.[selectedCuisine] || [];
-            return allRecipes.filter(recipe => {
-                const recipeId = Object.keys(recipeDatabase[selectedCuisine][category]).find(
-                    key => recipeDatabase[selectedCuisine][category][key].name === recipe.name
-                );
-                return allowedIds.includes(recipeId);
-            });
-        }
-
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', function() {
-            generateDays();
-            updateWeekDisplay();
-            updateStats();
-            updateUIForCuisine();
+            recipeCard.innerHTML = `
+                <img src="${recipe.imageUrl || 'https://placehold.co/80x80/e2e8f0/cbd5e0?text=Food'}" alt="${recipe.name}" class="w-20 h-20 rounded-md object-cover">
+                <div class="flex-1">
+                    <h3 class="font-bold text-gray-800">${recipe.name}</h3>
+                    <p class="text-sm text-gray-500">${recipe.cuisine}</p>
+                </div>
+                <button class="view-btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-3 py-1 rounded-md text-sm" data-recipe-id="${recipe.id}">View</button>
+            `;
+            recipeList.appendChild(recipeCard);
         });
+    }
 
-        function switchCuisine(cuisine) {
-            selectedCuisine = cuisine;
-            
-            // Update active cuisine button
-            document.querySelectorAll('.cuisine-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`[data-cuisine="${cuisine}"]`).classList.add('active');
-            
-            // Clear current meal plan
-            mealPlan = {};
-            
-            // Regenerate meal grid
-            generateDays();
-            updateStats();
-            updateUIForCuisine();
-        }
+    function renderPlanner() {
+        weeklyPlanner.innerHTML = '';
+        days.forEach(day => {
+            const dayCol = document.createElement('div');
+            dayCol.className = 'bg-gray-100 p-3 rounded-lg flex flex-col gap-4';
+            dayCol.innerHTML = `<h3 class="font-bold text-center">${day}</h3>`;
 
-        function updateUIForCuisine() {
-            const config = cuisineConfig[selectedCuisine];
-            document.getElementById('cuisineIndicator').textContent = config.flag;
-            document.getElementById('generateBtn').innerHTML = `${config.flag} Generate ${config.name} Plan`;
-            document.getElementById('shoppingTitle').innerHTML = `🛒 ${config.name} Grocery List`;
-            document.getElementById('modalHeader').innerHTML = `Choose a ${config.name} Recipe`;
-            document.getElementById('filtersTitle').innerHTML = `🥗 Dietary Preferences (${config.name})`;
-            
-            // Update placeholder text
-            document.getElementById('customMeal').placeholder = `Or enter a custom ${selectedCuisine} dish...`;
-        }
-
-        function generateDays() {
-            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-            const mealTypes = ['breakfast', 'lunch', 'dinner'];
-            const mealGrid = document.getElementById('mealGrid');
-            
-            mealGrid.innerHTML = '';
-            
-            days.forEach(day => {
-                const dayCard = document.createElement('div');
-                dayCard.className = 'day-card';
-                dayCard.innerHTML = `
-                    <div class="day-header">${day}</div>
-                    ${mealTypes.map(meal => `
-                        <div class="meal-label">${meal.charAt(0).toUpperCase() + meal.slice(1)}</div>
-                        <div class="meal-slot" onclick="openRecipeModal('${day}', '${meal}')" id="${day}-${meal}">
-                            Click to add ${meal}
-                        </div>
-                    `).join('')}
-                `;
-                mealGrid.appendChild(dayCard);
-            });
-        }
-
-        function openRecipeModal(day, mealType) {
-            currentSlot = { day, mealType };
-            const modal = document.getElementById('recipeModal');
-            const recipeList = document.getElementById('recipeList');
-            
-            recipeList.innerHTML = '';
-            
-            // Get filtered recipes for the meal type
-            const availableRecipes = getFilteredRecipes(mealType, currentDietaryFilter);
-            
-            availableRecipes.forEach(recipe => {
-                const item = document.createElement('div');
-                item.className = 'recipe-item';
-                item.innerHTML = `
-                    <div style="font-weight: 600; margin-bottom: 5px; font-size: 1.1em;">${recipe.name}</div>
-                    <div style="font-size: 0.9em; color: #636e72; margin-bottom: 10px;">${recipe.description}</div>
-                    <div class="recipe-meta">
-                        <div class="meta-item">
-                            <div class="meta-label">Prep</div>
-                            <div class="meta-value">${recipe.prepTime}</div>
-                        </div>
-                        <div class="meta-item">
-                            <div class="meta-label">Difficulty</div>
-                            <div class="meta-value">${recipe.difficulty}</div>
-                        </div>
-                        <div class="meta-item">
-                            <div class="meta-label">Calories</div>
-                            <div class="meta-value">${recipe.calories}</div>
-                        </div>
-                        <div class="meta-item">
-                            <div class="meta-label">Protein</div>
-                            <div class="meta-value">${recipe.protein}</div>
-                        </div>
-                        <div class="meta-item">
-                            <div class="meta-label">Region</div>
-                            <div class="meta-value">${recipe.region}</div>
-                        </div>
-                    </div>
-                    <div class="recipe-tags">
-                        ${recipe.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                `;
-                item.onclick = () => selectRecipe(recipe);
-                recipeList.appendChild(item);
-            });
-            
-            modal.style.display = 'block';
-            document.getElementById('customMeal').value = '';
-        }
-
-        function selectRecipe(recipe) {
-            if (currentSlot) {
-                const slotId = `${currentSlot.day}-${currentSlot.mealType}`;
-                const slot = document.getElementById(slotId);
-                slot.innerHTML = `
-                    <div class="meal-name">${recipe.name}</div>
-                    <div class="meal-meta">
-                        <span>${recipe.region}</span>
-                        <span>${recipe.calories} cal • ${recipe.protein}</span>
-                    </div>
-                `;
-                slot.classList.add('filled');
+            ['Lunch', 'Dinner'].forEach(meal => {
+                const mealSlotId = `${day}-${meal}`;
+                const recipeId = weeklyPlan[mealSlotId];
+                const recipe = recipeId ? allRecipes.find(r => r.id == recipeId) : null;
                 
-                if (!mealPlan[currentSlot.day]) {
-                    mealPlan[currentSlot.day] = {};
+                const mealSlot = document.createElement('div');
+                mealSlot.className = 'meal-slot bg-white p-2 rounded-lg min-h-[80px] flex flex-col justify-center items-center text-center transition-all duration-200';
+                mealSlot.dataset.slotId = mealSlotId;
+
+                if (recipe) {
+                    mealSlot.innerHTML = `
+                        <p class="text-sm font-semibold">${recipe.name}</p>
+                        <p class="text-xs text-gray-500">${meal}</p>
+                        <button class="remove-btn text-red-500 text-xs mt-1" data-slot-id="${mealSlotId}">Remove</button>
+                    `;
+                } else {
+                    mealSlot.innerHTML = `<span class="text-gray-400 text-sm">${meal}</span>`;
                 }
-                mealPlan[currentSlot.day][currentSlot.mealType] = recipe;
-                
-                updateShoppingList();
-                updateStats();
-                closeModal();
-            }
-        }
-
-        function addCustomMeal() {
-            const customMeal = document.getElementById('customMeal').value.trim();
-            if (customMeal && currentSlot) {
-                const recipe = {
-                    name: customMeal,
-                    ingredients: [],
-                    region: 'Custom',
-                    calories: 'N/A',
-                    protein: 'N/A',
-                    description: 'Custom meal',
-                    tags: ['custom']
-                };
-                selectRecipe(recipe);
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('recipeModal').style.display = 'none';
-        }
-
-        function generateWeeklyPlan() {
-            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-            const mealTypes = ['breakfast', 'lunch', 'dinner'];
-            
-            days.forEach(day => {
-                mealTypes.forEach(mealType => {
-                    const availableRecipes = getFilteredRecipes(mealType, currentDietaryFilter);
-                    
-                    if (availableRecipes.length > 0) {
-                        const randomRecipe = availableRecipes[Math.floor(Math.random() * availableRecipes.length)];
-                        
-                        const slotId = `${day}-${mealType}`;
-                        const slot = document.getElementById(slotId);
-                        slot.innerHTML = `
-                            <div class="meal-content" style="pointer-events: none;">
-                                <div class="meal-name">${randomRecipe.name}</div>
-                                <div class="meal-meta">
-                                    <span>${randomRecipe.region}</span>
-                                    <span>${randomRecipe.calories} cal • ${randomRecipe.protein}</span>
-                                </div>
-                            </div>
-                            <div class="meal-tooltip">👁️ Click to view recipe</div>
-                        `;
-                        slot.classList.add('filled');
-                        
-                        if (!mealPlan[day]) {
-                            mealPlan[day] = {};
-                        }
-                        mealPlan[day][mealType] = randomRecipe;
-                    }
-                });
+                dayCol.appendChild(mealSlot);
             });
-            
-            updateShoppingList();
-            updateStats();
-        }
+            weeklyPlanner.appendChild(dayCol);
+        });
+    }
+    
+    function showRecipeModal(recipeId) {
+        const recipe = allRecipes.find(r => r.id == recipeId);
+        if (!recipe) return;
 
-        function applyDietaryFilter(filter) {
-            currentDietaryFilter = filter;
-            setActiveFilter(filter);
-        }
+        modalContent.innerHTML = `
+            <div class="p-6">
+                <div class="flex justify-between items-start">
+                    <h2 class="text-3xl font-bold mb-4">${recipe.name}</h2>
+                    <button id="modal-close-btn" class="text-3xl font-light text-gray-500 hover:text-gray-800">&times;</button>
+                </div>
+                <img src="${recipe.imageUrl || 'https://placehold.co/600x400/e2e8f0/cbd5e0?text=Food'}" alt="${recipe.name}" class="w-full h-64 object-cover rounded-lg mb-4">
+                <p class="text-gray-600 mb-4">${recipe.description}</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 text-center">
+                    <div class="bg-gray-100 p-2 rounded-lg"><strong>Cuisine:</strong> ${recipe.cuisine}</div>
+                    <div class="bg-gray-100 p-2 rounded-lg"><strong>Prep Time:</strong> ${recipe.prepTime} mins</div>
+                    <div class="bg-gray-100 p-2 rounded-lg"><strong>Cook Time:</strong> ${recipe.cookTime} mins</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 border-b pb-1">Ingredients</h3>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 border-b pb-1">Instructions</h3>
+                        <div class="space-y-2 text-gray-700 whitespace-pre-line">${recipe.instructions}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        recipeModal.classList.remove('hidden');
+        setTimeout(() => modalContent.classList.add('modal-enter-active'), 10);
+        document.getElementById('modal-close-btn').addEventListener('click', closeRecipeModal);
+    }
+    
+    function closeRecipeModal() {
+        modalContent.classList.remove('modal-enter-active');
+        modalContent.classList.add('modal-exit-active');
+        setTimeout(() => {
+            recipeModal.classList.add('hidden');
+            modalContent.classList.remove('modal-exit-active');
+        }, 300);
+    }
 
-        function setActiveFilter(filter) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
+    function handleFilterClick(e) {
+        filterBtns.forEach(btn => {
+            btn.classList.remove('bg-emerald-500', 'text-white');
+            btn.classList.add('bg-gray-200', 'text-gray-700');
+        });
+        e.target.classList.add('bg-emerald-500', 'text-white');
+        e.target.classList.remove('bg-gray-200', 'text-gray-700');
+        renderRecipes(e.target.dataset.cuisine);
+    }
+
+    function generateRandomPlan() {
+        if (allRecipes.length === 0) {
+            alert("There are no recipes to generate a plan from. Please add some recipes first!");
+            return;
+        }
+        weeklyPlan = {};
+        days.forEach(day => {
+            ['Lunch', 'Dinner'].forEach(meal => {
+                const randomRecipe = allRecipes[Math.floor(Math.random() * allRecipes.length)];
+                weeklyPlan[`${day}-${meal}`] = randomRecipe.id;
             });
-            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
-        }
+        });
+        renderPlanner();
+        savePlanToLocalStorage();
+    }
+    
+    // Event Listeners
+    filterBtns.forEach(btn => btn.addEventListener('click', handleFilterClick));
+    generatePlanBtn.addEventListener('click', generateRandomPlan);
+    clearPlanBtn.addEventListener('click', () => {
+        weeklyPlan = {};
+        renderPlanner();
+        savePlanToLocalStorage();
+    });
 
-        function clearAllMeals() {
-            if (confirm('Are you sure you want to clear all planned meals?')) {
-                mealPlan = {};
-                const slots = document.querySelectorAll('.meal-slot');
-                slots.forEach(slot => {
-                    const mealType = slot.id.split('-')[1];
-                    slot.innerHTML = `Click to add ${mealType}`;
-                    slot.classList.remove('filled');
-                });
-                updateShoppingList();
-                updateStats();
-            }
+    recipeList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('view-btn')) {
+            showRecipeModal(e.target.dataset.recipeId);
         }
+    });
 
-        function updateShoppingList() {
-            const shoppingList = document.getElementById('shoppingList');
-            const ingredientsByCategory = {
-                'Spices & Seasonings': new Set(),
-                'Vegetables & Fresh': new Set(),
-                'Grains & Lentils': new Set(),
-                'Dairy & Others': new Set()
-            };
-            
-            Object.values(mealPlan).forEach(dayMeals => {
-                Object.values(dayMeals).forEach(meal => {
-                    if (meal.ingredients && Array.isArray(meal.ingredients)) {
-                        meal.ingredients.forEach(ingredient => {
-                            const item = typeof ingredient === 'object' ? ingredient.item : ingredient;
-                            const category = typeof ingredient === 'object' ? ingredient.category : 'basic';
-                            
-                            // Categorize ingredients
-                            if (['spices', 'herbs', 'aromatics', 'seasoning', 'peppers'].includes(category)) {
-                                ingredientsByCategory['Spices & Seasonings'].add(item);
-                            } else if (['grains', 'lentils', 'legumes', 'pasta', 'bread', 'dough'].includes(category)) {
-                                ingredientsByCategory['Grains & Lentils'].add(item);
-                            } else if (['dairy', 'cheese', 'nuts', 'basic', 'oils', 'beverages', 'alcohol'].includes(category)) {
-                                ingredientsByCategory['Dairy & Others'].add(item);
-                            } else {
-                                ingredientsByCategory['Vegetables & Fresh'].add(item);
-                            }
-                        });
-                    }
-                });
-            });
-            
-            // Check if we have any ingredients
-            const totalIngredients = Object.values(ingredientsByCategory).reduce((total, set) => total + set.size, 0);
-            
-            if (totalIngredients === 0) {
-                const config = cuisineConfig[selectedCuisine];
-                shoppingList.innerHTML = `<div class="empty-state">Add ${config.name.toLowerCase()} meals to generate your grocery list!</div>`;
-            } else {
-                let html = '';
-                Object.entries(ingredientsByCategory).forEach(([category, itemsSet]) => {
-                    if (itemsSet.size > 0) {
-                        html += `<div class="category-header">${category}</div>`;
-                        Array.from(itemsSet).forEach(item => {
-                            html += `<div class="ingredient-item">${item}</div>`;
-                        });
-                    }
-                });
-                shoppingList.innerHTML = html;
-            }
+    recipeModal.addEventListener('click', (e) => {
+        if (e.target === recipeModal) {
+            closeRecipeModal();
         }
+    });
 
-        function updateStats() {
-            const totalMeals = Object.values(mealPlan).reduce((count, dayMeals) => 
-                count + Object.keys(dayMeals).length, 0);
-            
-            const uniqueRecipes = new Set();
-            let totalCalories = 0;
-            
-            Object.values(mealPlan).forEach(dayMeals => {
-                Object.values(dayMeals).forEach(meal => {
-                    uniqueRecipes.add(meal.name);
-                    if (typeof meal.calories === 'number') {
-                        totalCalories += meal.calories;
-                    }
-                });
-            });
-            
-            // Calculate shopping items
-            const allIngredients = new Set();
-            Object.values(mealPlan).forEach(dayMeals => {
-                Object.values(dayMeals).forEach(meal => {
-                    if (meal.ingredients && Array.isArray(meal.ingredients)) {
-                        meal.ingredients.forEach(ingredient => {
-                            const item = typeof ingredient === 'object' ? ingredient.item : ingredient;
-                            allIngredients.add(item);
-                        });
-                    }
-                });
-            });
-            
-            document.getElementById('plannedMeals').textContent = totalMeals;
-            document.getElementById('totalCalories').textContent = totalCalories || 0;
-            document.getElementById('shoppingItems').textContent = allIngredients.size;
+    weeklyPlanner.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-btn')) {
+            delete weeklyPlan[e.target.dataset.slotId];
+            renderPlanner();
+            savePlanToLocalStorage();
         }
+    });
 
-        function printMealPlan() {
-            window.print();
-        }
+    // Drag and Drop Logic
+    let draggedItemId = null;
 
-        function saveMealPlan() {
-            const config = cuisineConfig[selectedCuisine];
-            const dataStr = JSON.stringify({
-                cuisine: selectedCuisine,
-                cuisineName: config.name,
-                weekOffset: currentWeekOffset,
-                mealPlan: mealPlan,
-                generatedDate: new Date().toISOString()
-            }, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${selectedCuisine}-meal-plan.json`;
-            link.click();
+    recipeList.addEventListener('dragstart', (e) => {
+        if (e.target.dataset.recipeId) {
+            draggedItemId = e.target.dataset.recipeId;
+            e.target.classList.add('dragging');
         }
+    });
 
-        function changeWeek(direction) {
-            currentWeekOffset += direction;
-            updateWeekDisplay();
+    recipeList.addEventListener('dragend', (e) => {
+        if (e.target.dataset.recipeId) {
+            draggedItemId = null;
+            e.target.classList.remove('dragging');
         }
+    });
+    
+    weeklyPlanner.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const slot = e.target.closest('.meal-slot');
+        if (slot) {
+            slot.classList.add('drag-over');
+        }
+    });
+    
+    weeklyPlanner.addEventListener('dragleave', (e) => {
+        const slot = e.target.closest('.meal-slot');
+        if (slot) {
+            slot.classList.remove('drag-over');
+        }
+    });
 
-        function updateWeekDisplay() {
-            const today = new Date();
-            const startOfWeek = new Date(today);
-            startOfWeek.setDate(today.getDate() - today.getDay() + 1 + (currentWeekOffset * 7));
-            const endOfWeek = new Date(startOfWeek);
-            endOfWeek.setDate(startOfWeek.getDate() + 6);
-            
-            const options = { month: 'short', day: 'numeric' };
-            const startStr = startOfWeek.toLocaleDateString('en-US', options);
-            const endStr = endOfWeek.toLocaleDateString('en-US', options);
-            const year = startOfWeek.getFullYear();
-            
-            document.getElementById('currentWeek').textContent = `Week of ${startStr} - ${endStr}, ${year}`;
+    weeklyPlanner.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const slot = e.target.closest('.meal-slot');
+        if (slot && draggedItemId) {
+            slot.classList.remove('drag-over');
+            weeklyPlan[slot.dataset.slotId] = draggedItemId;
+            renderPlanner();
+            savePlanToLocalStorage();
         }
+    });
+    
+    // Add recipe modal logic
+    addRecipeBtn.addEventListener('click', () => {
+        addRecipeForm.reset();
+        addRecipeModal.classList.remove('hidden');
+    });
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('recipeModal');
-            const recipeModal = document.getElementById('recipeDetailsModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-            if (event.target === recipeModal) {
-                closeRecipeDetails();
-            }
+    addModalCloseBtn.addEventListener('click', () => {
+        addRecipeModal.classList.add('hidden');
+    });
+
+    addRecipeModal.addEventListener('click', (e) => {
+        if (e.target === addRecipeModal) {
+            addRecipeModal.classList.add('hidden');
         }
-    </script>
+    });
+    
+    addRecipeForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const newRecipe = {
+            id: Date.now(), // Simple unique ID
+            name: formData.get('name'),
+            cuisine: formData.get('cuisine'),
+            description: formData.get('description'),
+            prepTime: parseInt(formData.get('prepTime')),
+            cookTime: parseInt(formData.get('cookTime')),
+            ingredients: formData.get('ingredients').split('\n').filter(i => i.trim() !== ''),
+            instructions: formData.get('instructions'),
+            imageUrl: `https://placehold.co/600x400/8b5cf6/ffffff?text=${formData.get('name').replace(/\s/g, '+')}`
+        };
+        
+        allRecipes.push(newRecipe);
+        saveRecipesToLocalStorage(allRecipes);
+        renderRecipes(document.querySelector('.filter-btn.bg-emerald-500').dataset.cuisine);
+        addRecipeModal.classList.add('hidden');
+    });
+
+
+    // Initial render
+    renderRecipes();
+    renderPlanner();
+});
+</script>
+
 </body>
 </html>
