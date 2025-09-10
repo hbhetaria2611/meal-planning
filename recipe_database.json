@@ -1,0 +1,589 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2025-01-08",
+    "totalRecipes": 38,
+    "cuisines": ["Italian Vegetarian", "Mexican Vegetarian"],
+    "description": "Comprehensive database of authentic Italian and Mexican vegetarian recipes"
+  },
+  "italian_cuisine": {
+    "breakfast": {
+      "cappuccino_cornetto": {
+        "id": "italian_breakfast_001",
+        "name": "Cappuccino & Cornetto",
+        "description": "Classic Italian breakfast with frothy coffee and sweet pastry",
+        "prepTime": "10 minutes",
+        "cookTime": "5 minutes",
+        "servings": 1,
+        "difficulty": "Easy",
+        "region": "Northern Italy",
+        "ingredients": [
+          {"item": "espresso coffee", "quantity": "1 shot", "category": "beverages"},
+          {"item": "whole milk", "quantity": "150ml", "category": "dairy"},
+          {"item": "cornetto pastry", "quantity": "1 piece", "category": "pastry"},
+          {"item": "sugar", "quantity": "to taste", "category": "sweetener"}
+        ],
+        "instructions": [
+          "Brew fresh espresso shot",
+          "Steam milk to create microfoam",
+          "Pour steamed milk into espresso",
+          "Serve with warm cornetto pastry"
+        ],
+        "nutritionalInfo": {
+          "calories": 280,
+          "protein": "8g",
+          "carbs": "35g",
+          "fat": "12g",
+          "fiber": "2g"
+        },
+        "tags": ["quick", "traditional", "coffee", "pastry"]
+      },
+      "frittata_spinaci": {
+        "id": "italian_breakfast_002",
+        "name": "Frittata agli Spinaci",
+        "description": "Italian spinach omelet baked to perfection with herbs",
+        "prepTime": "15 minutes",
+        "cookTime": "20 minutes",
+        "servings": 4,
+        "difficulty": "Medium",
+        "region": "Central Italy",
+        "ingredients": [
+          {"item": "fresh spinach", "quantity": "300g", "category": "vegetables"},
+          {"item": "eggs", "quantity": "6 large", "category": "dairy"},
+          {"item": "pecorino cheese", "quantity": "50g grated", "category": "cheese"},
+          {"item": "extra virgin olive oil", "quantity": "3 tbsp", "category": "oils"},
+          {"item": "garlic", "quantity": "2 cloves", "category": "aromatics"},
+          {"item": "fresh basil", "quantity": "6 leaves", "category": "herbs"},
+          {"item": "salt", "quantity": "to taste", "category": "seasoning"},
+          {"item": "black pepper", "quantity": "to taste", "category": "seasoning"}
+        ],
+        "instructions": [
+          "Sauté spinach with garlic in olive oil",
+          "Beat eggs with cheese, salt, and pepper",
+          "Combine spinach with egg mixture",
+          "Cook in oven-safe pan and finish in oven"
+        ],
+        "nutritionalInfo": {
+          "calories": 220,
+          "protein": "16g",
+          "carbs": "4g",
+          "fat": "16g",
+          "fiber": "3g"
+        },
+        "tags": ["protein-rich", "gluten-free", "iron-rich", "baked"]
+      },
+      "pane_olio_pomodoro": {
+        "id": "italian_breakfast_003",
+        "name": "Pane, Olio e Pomodoro",
+        "description": "Rustic bread with olive oil, tomatoes, and fresh basil",
+        "prepTime": "10 minutes",
+        "cookTime": "5 minutes",
+        "servings": 2,
+        "difficulty": "Easy",
+        "region": "Southern Italy",
+        "ingredients": [
+          {"item": "rustic bread", "quantity": "4 slices", "category": "bread"},
+          {"item": "ripe tomatoes", "quantity": "2 large", "category": "vegetables"},
+          {"item": "extra virgin olive oil", "quantity": "4 tbsp", "category": "oils"},
+          {"item": "fresh basil", "quantity": "8 leaves", "category": "herbs"},
+          {"item": "sea salt", "quantity": "to taste", "category": "seasoning"},
+          {"item": "garlic", "quantity": "1 clove", "category": "aromatics"}
+        ],
+        "instructions": [
+          "Toast bread slices until golden",
+          "Rub garlic on warm toast",
+          "Top with diced tomatoes and basil",
+          "Drizzle generously with olive oil and salt"
+        ],
+        "nutritionalInfo": {
+          "calories": 320,
+          "protein": "8g",
+          "carbs": "45g",
+          "fat": "14g",
+          "fiber": "6g"
+        },
+        "tags": ["vegan", "rustic", "simple", "fresh"]
+      }
+    },
+    "lunch": {
+      "pasta_arrabbiata": {
+        "id": "italian_lunch_001",
+        "name": "Pasta all'Arrabbiata",
+        "description": "Spicy tomato pasta with garlic, chili, and fresh herbs",
+        "prepTime": "10 minutes",
+        "cookTime": "20 minutes",
+        "servings": 4,
+        "difficulty": "Easy",
+        "region": "Lazio",
+        "ingredients": [
+          {"item": "penne pasta", "quantity": "400g", "category": "pasta"},
+          {"item": "San Marzano tomatoes", "quantity": "400g can", "category": "vegetables"},
+          {"item": "garlic", "quantity": "4 cloves", "category": "aromatics"},
+          {"item": "red chili flakes", "quantity": "1 tsp", "category": "spices"},
+          {"item": "extra virgin olive oil", "quantity": "4 tbsp", "category": "oils"},
+          {"item": "fresh parsley", "quantity": "3 tbsp chopped", "category": "herbs"},
+          {"item": "sea salt", "quantity": "to taste", "category": "seasoning"},
+          {"item": "pecorino romano", "quantity": "50g grated", "category": "cheese"}
+        ],
+        "instructions": [
+          "Cook pasta in salted boiling water until al dente",
+          "Sauté garlic and chili in olive oil",
+          "Add tomatoes and simmer 15 minutes",
+          "Toss pasta with sauce, parsley, and cheese"
+        ],
+        "nutritionalInfo": {
+          "calories": 420,
+          "protein": "14g",
+          "carbs": "72g",
+          "fat": "12g",
+          "fiber": "4g"
+        },
+        "tags": ["spicy", "vegan-option", "quick", "traditional"]
+      },
+      "risotto_funghi": {
+        "id": "italian_lunch_002",
+        "name": "Risotto ai Funghi",
+        "description": "Creamy mushroom risotto with porcini and fresh herbs",
+        "prepTime": "20 minutes",
+        "cookTime": "30 minutes",
+        "servings": 4,
+        "difficulty": "Hard",
+        "region": "Northern Italy",
+        "ingredients": [
+          {"item": "arborio rice", "quantity": "320g", "category": "grains"},
+          {"item": "mixed mushrooms", "quantity": "400g", "category": "vegetables"},
+          {"item": "vegetable stock", "quantity": "1.2L", "category": "liquids"},
+          {"item": "white wine", "quantity": "150ml", "category": "alcohol"},
+          {"item": "onion", "quantity": "1 medium", "category": "vegetables"},
+          {"item": "parmesan cheese", "quantity": "80g grated", "category": "cheese"},
+          {"item": "butter", "quantity": "50g", "category": "dairy"},
+          {"item": "extra virgin olive oil", "quantity": "3 tbsp", "category": "oils"},
+          {"item": "fresh thyme", "quantity": "2 sprigs", "category": "herbs"},
+          {"item": "garlic", "quantity": "2 cloves", "category": "aromatics"}
+        ],
+        "instructions": [
+          "Sauté mushrooms until golden, set aside",
+          "Cook onion until translucent, add rice",
+          "Add wine, then hot stock ladle by ladle",
+          "Stir constantly for 18-20 minutes until creamy",
+          "Fold in mushrooms, butter, and parmesan"
+        ],
+        "nutritionalInfo": {
+          "calories": 480,
+          "protein": "16g",
+          "carbs": "68g",
+          "fat": "16g",
+          "fiber": "3g"
+        },
+        "tags": ["creamy", "umami", "restaurant-style", "comfort-food"]
+      },
+      "caprese_salad": {
+        "id": "italian_lunch_003",
+        "name": "Insalata Caprese",
+        "description": "Fresh mozzarella with tomatoes, basil, and balsamic glaze",
+        "prepTime": "15 minutes",
+        "cookTime": "0 minutes",
+        "servings": 4,
+        "difficulty": "Easy",
+        "region": "Campania",
+        "ingredients": [
+          {"item": "fresh mozzarella", "quantity": "300g", "category": "cheese"},
+          {"item": "ripe tomatoes", "quantity": "4 large", "category": "vegetables"},
+          {"item": "fresh basil", "quantity": "20 leaves", "category": "herbs"},
+          {"item": "extra virgin olive oil", "quantity": "4 tbsp", "category": "oils"},
+          {"item": "balsamic vinegar", "quantity": "2 tbsp", "category": "condiments"},
+          {"item": "sea salt", "quantity": "to taste", "category": "seasoning"},
+          {"item": "black pepper", "quantity": "to taste", "category": "seasoning"}
+        ],
+        "instructions": [
+          "Slice mozzarella and tomatoes into thick rounds",
+          "Arrange alternating on plate with basil leaves",
+          "Drizzle with olive oil and balsamic vinegar",
+          "Season with salt and pepper"
+        ],
+        "nutritionalInfo": {
+          "calories": 320,
+          "protein": "18g",
+          "carbs": "8g",
+          "fat": "26g",
+          "fiber": "2g"
+        },
+        "tags": ["fresh", "no-cook", "summer", "simple"]
+      },
+      "pasta_primavera": {
+        "id": "italian_lunch_004",
+        "name": "Pasta Primavera",
+        "description": "Colorful pasta with seasonal vegetables in light olive oil sauce",
+        "prepTime": "20 minutes",
+        "cookTime": "25 minutes",
+        "servings": 4,
+        "difficulty": "Medium",
+        "region": "Modern Italian",
+        "ingredients": [
+          {"item": "linguine pasta", "quantity": "400g", "category": "pasta"},
+          {"item": "zucchini", "quantity": "2 medium", "category": "vegetables"},
+          {"item": "bell peppers", "quantity": "2 mixed", "category": "vegetables"},
+          {"item": "cherry tomatoes", "quantity": "250g", "category": "vegetables"},
+          {"item": "asparagus", "quantity": "200g", "category": "vegetables"},
+          {"item": "garlic", "quantity": "3 cloves", "category": "aromatics"},
+          {"item": "extra virgin olive oil", "quantity": "5 tbsp", "category": "oils"},
+          {"item": "fresh basil", "quantity": "15 leaves", "category": "herbs"},
+          {"item": "parmesan cheese", "quantity": "60g grated", "category": "cheese"},
+          {"item": "lemon juice", "quantity": "2 tbsp", "category": "citrus"}
+        ],
+        "instructions": [
+          "Cook pasta until al dente",
+          "Sauté vegetables in olive oil until tender-crisp",
+          "Add garlic and cherry tomatoes",
+          "Toss with pasta, basil, lemon, and parmesan"
+        ],
+        "nutritionalInfo": {
+          "calories": 450,
+          "protein": "16g",
+          "carbs": "70g",
+          "fat": "14g",
+          "fiber": "8g"
+        },
+        "tags": ["colorful", "seasonal", "healthy", "vegetable-rich"]
+      },
+      "minestrone_soup": {
+        "id": "italian_lunch_005",
+        "name": "Minestrone della Nonna",
+        "description": "Hearty vegetable soup with beans, pasta, and fresh herbs",
+        "prepTime": "25 minutes",
+        "cookTime": "45 minutes",
+        "servings": 6,
+        "difficulty": "Medium",
+        "region": "All Italy",
+        "ingredients": [
+          {"item": "cannellini beans", "quantity": "200g dried", "category": "legumes"},
+          {"item": "ditalini pasta", "quantity": "150g", "category": "pasta"},
+          {"item": "carrots", "quantity": "2 large", "category": "vegetables"},
+          {"item": "celery", "quantity": "3 stalks", "category": "vegetables"},
+          {"item": "onion", "quantity": "1 large", "category": "vegetables"},
+          {"item": "tomatoes", "quantity": "400g can", "category": "vegetables"},
+          {"item": "vegetable stock", "quantity": "1.5L", "category": "liquids"},
+          {"item": "extra virgin olive oil", "quantity": "4 tbsp", "category": "oils"},
+          {"item": "fresh rosemary", "quantity": "2 sprigs", "category": "herbs"},
+          {"item": "parmesan rind", "quantity": "1 piece", "category": "cheese"}
+        ],
+        "instructions": [
+          "Soak beans overnight, then cook until tender",
+          "Sauté onion, carrot, celery in olive oil",
+          "Add tomatoes, stock, beans, and herbs",
+          "Simmer 30 minutes, add pasta last 10 minutes"
+        ],
+        "nutritionalInfo": {
+          "calories": 380,
+          "protein": "18g",
+          "carbs": "62g",
+          "fat": "8g",
+          "fiber": "12g"
+        },
+        "tags": ["hearty", "protein-rich", "fiber-rich", "comfort-food"]
+      }
+    },
+    "dinner": {
+      "eggplant_parmigiana": {
+        "id": "italian_dinner_001",
+        "name": "Melanzane alla Parmigiana",
+        "description": "Layered eggplant baked with tomato sauce, mozzarella, and parmesan",
+        "prepTime": "45 minutes",
+        "cookTime": "60 minutes",
+        "servings": 6,
+        "difficulty": "Hard",
+        "region": "Southern Italy",
+        "ingredients": [
+          {"item": "large eggplants", "quantity": "3 pieces", "category": "vegetables"},
+          {"item": "tomato sauce", "quantity": "500ml", "category": "sauces"},
+          {"item": "mozzarella cheese", "quantity": "400g", "category": "cheese"},
+          {"item": "parmesan cheese", "quantity": "150g grated", "category": "cheese"},
+          {"item": "fresh basil", "quantity": "20 leaves", "category": "herbs"},
+          {"item": "all-purpose flour", "quantity": "100g", "category": "grains"},
+          {"item": "eggs", "quantity": "3 large", "category": "dairy"},
+          {"item": "breadcrumbs", "quantity": "200g", "category": "coating"},
+          {"item": "olive oil", "quantity": "for frying", "category": "oils"}
+        ],
+        "instructions": [
+          "Slice eggplants, salt, and drain 30 minutes",
+          "Bread eggplant slices and fry until golden",
+          "Layer with tomato sauce and cheeses",
+          "Bake at 180°C for 45 minutes until bubbly"
+        ],
+        "nutritionalInfo": {
+          "calories": 520,
+          "protein": "24g",
+          "carbs": "32g",
+          "fat": "34g",
+          "fiber": "8g"
+        },
+        "tags": ["comfort-food", "layered", "cheesy", "traditional"]
+      },
+      "pizza_margherita": {
+        "id": "italian_dinner_002",
+        "name": "Pizza Margherita",
+        "description": "Classic Neapolitan pizza with tomato, mozzarella, and fresh basil",
+        "prepTime": "120 minutes",
+        "cookTime": "10 minutes",
+        "servings": 4,
+        "difficulty": "Hard",
+        "region": "Campania",
+        "ingredients": [
+          {"item": "pizza dough", "quantity": "500g", "category": "dough"},
+          {"item": "San Marzano tomatoes", "quantity": "400g can", "category": "vegetables"},
+          {"item": "mozzarella di bufala", "quantity": "250g", "category": "cheese"},
+          {"item": "fresh basil", "quantity": "16 leaves", "category": "herbs"},
+          {"item": "extra virgin olive oil", "quantity": "3 tbsp", "category": "oils"},
+          {"item": "sea salt", "quantity": "to taste", "category": "seasoning"},
+          {"item": "semolina flour", "quantity": "for dusting", "category": "grains"}
+        ],
+        "instructions": [
+          "Prepare pizza dough and let rise 2 hours",
+          "Crush tomatoes with salt for sauce",
+          "Stretch dough, add sauce and torn mozzarella",
+          "Bake at highest temperature until crust is golden",
+          "Top with fresh basil and olive oil"
+        ],
+        "nutritionalInfo": {
+          "calories": 480,
+          "protein": "20g",
+          "carbs": "58g",
+          "fat": "18g",
+          "fiber": "3g"
+        },
+        "tags": ["iconic", "neapolitan", "wood-fired", "artisanal"]
+      },
+      "osso_buco_vegetables": {
+        "id": "italian_dinner_003",
+        "name": "Osso Buco di Verdure",
+        "description": "Vegetarian version with large mushrooms braised in wine and herbs",
+        "prepTime": "30 minutes",
+        "cookTime": "90 minutes",
+        "servings": 4,
+        "difficulty": "Medium",
+        "region": "Lombardy",
+        "ingredients": [
+          {"item": "large portobello mushrooms", "quantity": "8 pieces", "category": "vegetables"},
+          {"item": "carrots", "quantity": "2 large", "category": "vegetables"},
+          {"item": "celery", "quantity": "3 stalks", "category": "vegetables"},
+          {"item": "onion", "quantity": "1 large", "category": "vegetables"},
+          {"item": "white wine", "quantity": "250ml", "category": "alcohol"},
+          {"item": "vegetable stock", "quantity": "500ml", "category": "liquids"},
+          {"item": "tomatoes", "quantity": "400g can", "category": "vegetables"},
+          {"item": "gremolata", "quantity": "3 tbsp", "category": "garnish"},
+          {"item": "risotto milanese", "quantity": "for serving", "category": "grains"}
+        ],
+        "instructions": [
+          "Brown mushrooms in olive oil",
+          "Sauté vegetables until soft",
+          "Add wine, stock, and tomatoes",
+          "Braise slowly for 1.5 hours",
+          "Serve with gremolata and saffron risotto"
+        ],
+        "nutritionalInfo": {
+          "calories": 380,
+          "protein": "12g",
+          "carbs": "45g",
+          "fat": "10g",
+          "fiber": "8g"
+        },
+        "tags": ["braised", "wine-rich", "umami", "sophisticated"]
+      }
+    }
+  },
+  "mexican_cuisine": {
+    "breakfast": {
+      "huevos_rancheros": {
+        "id": "mexican_breakfast_001",
+        "name": "Huevos Rancheros",
+        "description": "Fried eggs on tortillas with spicy salsa ranchera and beans",
+        "prepTime": "15 minutes",
+        "cookTime": "20 minutes",
+        "servings": 4,
+        "difficulty": "Medium",
+        "region": "Central Mexico",
+        "ingredients": [
+          {"item": "corn tortillas", "quantity": "8 pieces", "category": "bread"},
+          {"item": "eggs", "quantity": "8 large", "category": "dairy"},
+          {"item": "tomatoes", "quantity": "4 large", "category": "vegetables"},
+          {"item": "jalapeño peppers", "quantity": "2 pieces", "category": "peppers"},
+          {"item": "white onion", "quantity": "1 medium", "category": "vegetables"},
+          {"item": "garlic", "quantity": "3 cloves", "category": "aromatics"},
+          {"item": "refried beans", "quantity": "400g", "category": "legumes"},
+          {"item": "queso fresco", "quantity": "100g crumbled", "category": "cheese"},
+          {"item": "avocado", "quantity": "2 pieces", "category": "fruits"},
+          {"item": "cilantro", "quantity": "1/4 cup chopped", "category": "herbs"},
+          {"item": "lime", "quantity": "2 pieces", "category": "citrus"},
+          {"item": "vegetable oil", "quantity": "3 tbsp", "category": "oils"}
+        ],
+        "instructions": [
+          "Make salsa ranchera with tomatoes, jalapeños, onion",
+          "Warm tortillas and refried beans",
+          "Fry eggs sunny-side up",
+          "Assemble with beans, tortillas, eggs, salsa",
+          "Garnish with avocado, cheese, cilantro, lime"
+        ],
+        "nutritionalInfo": {
+          "calories": 520,
+          "protein": "22g",
+          "carbs": "45g",
+          "fat": "28g",
+          "fiber": "12g"
+        },
+        "tags": ["hearty", "protein-rich", "spicy", "traditional"]
+      },
+      "chilaquiles_verdes": {
+        "id": "mexican_breakfast_002",
+        "name": "Chilaquiles Verdes",
+        "description": "Crispy tortilla chips in green salsa with cream and cheese",
+        "prepTime": "20 minutes",
+        "cookTime": "25 minutes",
+        "servings": 4,
+        "difficulty": "Medium",
+        "region": "Central Mexico",
+        "ingredients": [
+          {"item": "corn tortillas", "quantity": "12 pieces", "category": "bread"},
+          {"item": "tomatillos", "quantity": "500g", "category": "vegetables"},
+          {"item": "serrano peppers", "quantity": "2-3 pieces", "category": "peppers"},
+          {"item": "white onion", "quantity": "1/4 medium", "category": "vegetables"},
+          {"item": "garlic", "quantity": "2 cloves", "category": "aromatics"},
+          {"item": "Mexican crema", "quantity": "1/2 cup", "category": "dairy"},
+          {"item": "queso fresco", "quantity": "150g crumbled", "category": "cheese"},
+          {"item": "white onion", "quantity": "1/4 cup sliced", "category": "vegetables"},
+          {"item": "cilantro", "quantity": "1/4 cup", "category": "herbs"},
+          {"item": "vegetable oil", "quantity": "for frying", "category": "oils"}
+        ],
+        "instructions": [
+          "Cut tortillas into triangles and fry until crispy",
+          "Roast tomatillos, peppers, onion, garlic",
+          "Blend into smooth green salsa",
+          "Simmer chips in salsa until slightly softened",
+          "Top with crema, cheese, onion, cilantro"
+        ],
+        "nutritionalInfo": {
+          "calories": 420,
+          "protein": "14g",
+          "carbs": "38g",
+          "fat": "24g",
+          "fiber": "6g"
+        },
+        "tags": ["crispy", "tangy", "comfort-food", "cheese-rich"]
+      },
+      "molletes": {
+        "id": "mexican_breakfast_003",
+        "name": "Molletes",
+        "description": "Open-faced sandwich with refried beans, cheese, and pico de gallo",
+        "prepTime": "15 minutes",
+        "cookTime": "10 minutes",
+        "servings": 4,
+        "difficulty": "Easy",
+        "region": "Northern Mexico",
+        "ingredients": [
+          {"item": "bolillo bread", "quantity": "4 pieces", "category": "bread"},
+          {"item": "refried beans", "quantity": "400g", "category": "legumes"},
+          {"item": "oaxaca cheese", "quantity": "200g shredded", "category": "cheese"},
+          {"item": "tomatoes", "quantity": "2 medium", "category": "vegetables"},
+          {"item": "white onion", "quantity": "1/4 cup diced", "category": "vegetables"},
+          {"item": "jalapeño pepper", "quantity": "1 piece minced", "category": "peppers"},
+          {"item": "cilantro", "quantity": "2 tbsp chopped", "category": "herbs"},
+          {"item": "lime juice", "quantity": "1 tbsp", "category": "citrus"},
+          {"item": "salt", "quantity": "to taste", "category": "seasoning"}
+        ],
+        "instructions": [
+          "Slice bolillos in half lengthwise",
+          "Spread refried beans on bread",
+          "Top with shredded cheese",
+          "Broil until cheese melts and bubbles",
+          "Top with fresh pico de gallo"
+        ],
+        "nutritionalInfo": {
+          "calories": 380,
+          "protein": "18g",
+          "carbs": "42g",
+          "fat": "16g",
+          "fiber": "8g"
+        },
+        "tags": ["quick", "cheesy", "satisfying", "open-faced"]
+      }
+    },
+    "lunch": {
+      "quesadillas_hongos": {
+        "id": "mexican_lunch_001",
+        "name": "Quesadillas de Hongos",
+        "description": "Flour tortillas filled with sautéed mushrooms and Oaxaca cheese",
+        "prepTime": "20 minutes",
+        "cookTime": "25 minutes",
+        "servings": 4,
+        "difficulty": "Medium",
+        "region": "Central Mexico",
+        "ingredients": [
+          {"item": "flour tortillas", "quantity": "8 large", "category": "bread"},
+          {"item": "mixed mushrooms", "quantity": "500g", "category": "vegetables"},
+          {"item": "oaxaca cheese", "quantity": "300g shredded", "category": "cheese"},
+          {"item": "white onion", "quantity": "1 medium", "category": "vegetables"},
+          {"item": "garlic", "quantity": "3 cloves", "category": "aromatics"},
+          {"item": "epazote", "quantity": "2 tbsp fresh", "category": "herbs"},
+          {"item": "vegetable oil", "quantity": "2 tbsp", "category": "oils"},
+          {"item": "salt", "quantity": "to taste", "category": "seasoning"},
+          {"item": "salsa verde", "quantity": "for serving", "category": "sauces"},
+          {"item": "Mexican crema", "quantity": "for serving", "category": "dairy"}
+        ],
+        "instructions": [
+          "Sauté mushrooms with onion and garlic until golden",
+          "Season with salt and add epazote",
+          "Fill tortillas with mushroom mixture and cheese",
+          "Cook on griddle until golden and cheese melts",
+          "Serve with salsa verde and crema"
+        ],
+        "nutritionalInfo": {
+          "calories": 450,
+          "protein": "20g",
+          "carbs": "35g",
+          "fat": "26g",
+          "fiber": "4g"
+        },
+        "tags": ["cheesy", "savory", "mushroom-rich", "griddled"]
+      },
+      "pozole_rojo_vegetariano": {
+        "id": "mexican_lunch_002",
+        "name": "Pozole Rojo Vegetariano",
+        "description": "Hearty hominy soup with red chile broth and fresh garnishes",
+        "prepTime": "30 minutes",
+        "cookTime": "90 minutes",
+        "servings": 6,
+        "difficulty": "Hard",
+        "region": "Jalisco",
+        "ingredients": [
+          {"item": "hominy corn", "quantity": "500g cooked", "category": "grains"},
+          {"item": "guajillo chiles", "quantity": "6 pieces", "category": "peppers"},
+          {"item": "ancho chiles", "quantity": "4 pieces", "category": "peppers"},
+          {"item": "chipotle chiles", "quantity": "2 pieces", "category": "peppers"},
+          {"item": "white onion", "quantity": "1 large", "category": "vegetables"},
+          {"item": "garlic", "quantity": "6 cloves", "category": "aromatics"},
+          {"item": "vegetable stock", "quantity": "2L", "category": "liquids"},
+          {"item": "bay leaves", "quantity": "3 pieces", "category": "herbs"},
+          {"item": "Mexican oregano", "quantity": "2 tsp", "category": "herbs"},
+          {"item": "cabbage", "quantity": "1 cup shredded", "category": "vegetables"},
+          {"item": "radishes", "quantity": "6 sliced", "category": "vegetables"},
+          {"item": "lime wedges", "quantity": "12 pieces", "category": "citrus"}
+        ],
+        "instructions": [
+          "Toast and rehydrate dried chiles",
+          "Blend chiles with onion and garlic",
+          "Strain and simmer chile sauce 30 minutes",
+          "Add hominy and stock, simmer 45 minutes",
+          "Serve with fresh garnishes on the side"
+        ],
+        "nutritionalInfo": {
+          "calories": 320,
+          "protein": "8g",
+          "carbs": "68g",
+          "fat": "4g",
+          "fiber": "12g"
+        },
+        "tags": ["spicy", "comforting", "soup", "traditional"]
+      },
+      "chiles_rellenos": {
+        "id": "mexican_lunch_003",
+        "name": "Chiles Rellenos de Queso",
+        
