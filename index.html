@@ -395,6 +395,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="text-sm font-medium ${item.checked ? 'line-through text-gray-500' : 'text-gray-800'}">${item.ingredient}</p>
                     <p class="text-xs text-gray-500 mt-1">For: ${item.recipes.join(', ')}</p>
                 </div>
+                <button class="kroger-btn bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded-md transition-colors flex-shrink-0 ml-2" 
+                        data-ingredient="${item.ingredient}" 
+                        title="Search on Kroger">
+                    🛒 Kroger
+                </button>
             `;
             
             shoppingListItems.appendChild(itemDiv);
@@ -410,6 +415,22 @@ document.addEventListener('DOMContentLoaded', () => {
         shoppingList = [];
         saveShoppingListToLocalStorage();
         renderShoppingList();
+    }
+
+    function searchKroger(ingredient) {
+        // Clean up the ingredient name for better search results
+        const searchTerm = ingredient
+            .replace(/^\d+\s*(cups?|tbsp|tsp|oz|lbs?|kg|grams?|ml|liters?)?\s*/, '') // Remove quantities
+            .replace(/,.*$/, '') // Remove everything after comma
+            .replace(/\(.*?\)/g, '') // Remove parentheses and contents
+            .trim();
+        
+        // Encode the search term for URL
+        const encodedSearch = encodeURIComponent(searchTerm);
+        
+        // Open Kroger search in a new tab
+        const krogerUrl = `https://www.kroger.com/search?query=${encodedSearch}`;
+        window.open(krogerUrl, '_blank');
     }
     
     function showRecipeModal(recipeId) {
@@ -512,6 +533,9 @@ document.addEventListener('DOMContentLoaded', () => {
             shoppingList[index].checked = e.target.checked;
             saveShoppingListToLocalStorage();
             renderShoppingList();
+        } else if (e.target.classList.contains('kroger-btn')) {
+            const ingredient = e.target.dataset.ingredient;
+            searchKroger(ingredient);
         }
     });
 
