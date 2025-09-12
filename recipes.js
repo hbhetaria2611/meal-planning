@@ -17,10 +17,10 @@ window.initialRecipes = [
         imageUrl: "https://placehold.co/600x400/10b981/ffffff?text=Veg+Biryani"
     },
     {
-        id: 3, name: "Mushroom Risotto", cuisine: "Italian", description: "A creamy and savory Italian rice dish made with Arborio rice, mushrooms, and Parmesan cheese.", prepTime: 10, cookTime: 35,
-        ingredients: ["1 cup Arborio rice", "5 cups Vegetable broth, warm", "200g Mushrooms, sliced", "1 Onion, finely chopped", "2 cloves Garlic, minced", "1/2 cup Dry white wine", "1/2 cup grated Parmesan cheese", "2 tbsp Olive oil", "2 tbsp Butter"],
-        instructions: "1. In a large pan, sauté onions and garlic in olive oil until soft.\n2. Add mushrooms and cook until they release their water and brown.\n3. Add the Arborio rice and toast for 1 minute.\n4. Pour in the white wine and cook until it's absorbed.\n5. Add the warm vegetable broth one ladle at a time, stirring continuously, waiting for it to be absorbed before adding the next.\n6. Once the rice is creamy and al dente, stir in the butter and Parmesan cheese. Season with salt and pepper.",
-        imageUrl: "https://placehold.co/600x400/8b5cf6/ffffff?text=Mushroom+Risotto"
+        id: 3, name: "Lemon Herb Risotto", cuisine: "Italian", description: "A bright and creamy risotto with fresh herbs, lemon zest, and Parmesan cheese.", prepTime: 10, cookTime: 35,
+        ingredients: ["1 cup Arborio rice", "5 cups Vegetable broth, warm", "1 Onion, finely chopped", "2 cloves Garlic, minced", "1/2 cup Dry white wine", "1/2 cup grated Parmesan cheese", "2 tbsp Olive oil", "2 tbsp Butter", "Zest of 1 lemon", "Fresh herbs (parsley, thyme)"],
+        instructions: "1. In a large pan, sauté onions and garlic in olive oil until soft.\n2. Add the Arborio rice and toast for 1 minute.\n3. Pour in the white wine and cook until it's absorbed.\n4. Add the warm vegetable broth one ladle at a time, stirring continuously, waiting for it to be absorbed before adding the next.\n5. Once the rice is creamy and al dente, stir in the butter, Parmesan cheese, lemon zest, and fresh herbs. Season with salt and pepper.",
+        imageUrl: "https://placehold.co/600x400/8b5cf6/ffffff?text=Lemon+Risotto"
     },
     {
         id: 4, name: "Margherita Pizza", cuisine: "Italian", description: "A classic Neapolitan pizza, made with San Marzano tomatoes, fresh mozzarella, fresh basil, salt, and extra-virgin olive oil.", prepTime: 20, cookTime: 15,
@@ -271,37 +271,37 @@ window.initialRecipes = [
     
     // Additional Indian Recipes
     {
-        id: 270, name: "Rajma (Kidney Bean Curry)", cuisine: "Indian", description: "A hearty North Indian curry made with kidney beans in a rich tomato-based gravy.", prepTime: 20, cookTime: 45,
+        id: 45, name: "Rajma (Kidney Bean Curry)", cuisine: "Indian", description: "A hearty North Indian curry made with kidney beans in a rich tomato-based gravy.", prepTime: 20, cookTime: 45,
         ingredients: ["1 cup Kidney beans (Rajma), soaked overnight", "2 Onions, chopped", "3 Tomatoes, pureed", "1 tbsp Ginger-garlic paste", "1 tsp Cumin seeds", "2 tsp Coriander powder", "1 tsp Garam masala", "1 tsp Red chili powder"],
         instructions: "1. Pressure cook soaked rajma for 15-20 minutes until soft.\n2. Heat oil, add cumin seeds, then onions. Cook until golden.\n3. Add ginger-garlic paste, cook for a minute.\n4. Add tomato puree and all spices. Cook until oil separates.\n5. Add cooked rajma with cooking water. Simmer for 15 minutes.\n6. Garnish with cilantro and serve with rice.",
         imageUrl: "https://placehold.co/600x400/dc2626/ffffff?text=Rajma+Curry"
     },
     {
-        id: 271, name: "Bhindi Masala", cuisine: "Indian", description: "Crispy okra cooked with onions, tomatoes, and aromatic spices.", prepTime: 15, cookTime: 25,
+        id: 46, name: "Bhindi Masala", cuisine: "Indian", description: "Crispy okra cooked with onions, tomatoes, and aromatic spices.", prepTime: 15, cookTime: 25,
         ingredients: ["500g Okra (Bhindi), cut", "2 Onions, sliced", "2 Tomatoes, chopped", "1 tsp Turmeric powder", "1 tsp Coriander powder", "1/2 tsp Red chili powder", "1 tsp Cumin seeds", "Dry mango powder (Amchur)"],
         instructions: "1. Wash and dry okra completely. Cut into 1-inch pieces.\n2. Heat oil, add cumin seeds, then okra. Fry until crispy.\n3. Remove okra and set aside.\n4. In same pan, add onions, cook until golden.\n5. Add tomatoes and spices, cook until soft.\n6. Add fried okra back, mix gently and cook for 5 minutes.",
         imageUrl: "https://placehold.co/600x400/16a34a/ffffff?text=Bhindi+Masala"
     },
     {
-        id: 272, name: "Chole (Chickpea Curry)", cuisine: "Indian", description: "Spicy and tangy chickpea curry, a popular North Indian dish.", prepTime: 15, cookTime: 30,
+        id: 47, name: "Chole (Chickpea Curry)", cuisine: "Indian", description: "Spicy and tangy chickpea curry, a popular North Indian dish.", prepTime: 15, cookTime: 30,
         ingredients: ["2 cups Chickpeas (Chole), cooked", "2 Onions, chopped", "3 Tomatoes, pureed", "1 tbsp Ginger-garlic paste", "2 tsp Chole masala powder", "1 tsp Cumin seeds", "1 Bay leaf", "2 Green chilies"],
         instructions: "1. Heat oil, add cumin seeds and bay leaf.\n2. Add onions, cook until golden brown.\n3. Add ginger-garlic paste and green chilies.\n4. Add tomato puree and chole masala. Cook until thick.\n5. Add cooked chickpeas with water. Simmer for 15 minutes.\n6. Garnish with onions and cilantro.",
         imageUrl: "https://placehold.co/600x400/f59e0b/ffffff?text=Chole+Curry"
     },
     {
-        id: 273, name: "Methi Thepla", cuisine: "Indian", description: "Nutritious flatbread made with fresh fenugreek leaves and spices.", prepTime: 20, cookTime: 25,
+        id: 48, name: "Methi Thepla", cuisine: "Indian", description: "Nutritious flatbread made with fresh fenugreek leaves and spices.", prepTime: 20, cookTime: 25,
         ingredients: ["2 cups Whole wheat flour", "1 cup Fresh fenugreek leaves (Methi)", "1/4 cup Yogurt", "1 tsp Ginger-chili paste", "1/2 tsp Turmeric powder", "1 tsp Red chili powder", "Salt to taste", "Oil for cooking"],
         instructions: "1. Clean and chop fenugreek leaves finely.\n2. Mix flour, methi, yogurt, and all spices.\n3. Add water gradually to make a soft dough.\n4. Rest the dough for 15 minutes.\n5. Roll into thin circles and cook on hot tava with oil.\n6. Serve with pickle and yogurt.",
         imageUrl: "https://placehold.co/600x400/65a30d/ffffff?text=Methi+Thepla"
     },
     {
-        id: 274, name: "Baingan Bharta", cuisine: "Indian", description: "Smoky roasted eggplant mash cooked with onions, tomatoes, and spices.", prepTime: 10, cookTime: 30,
+        id: 49, name: "Baingan Bharta", cuisine: "Indian", description: "Smoky roasted eggplant mash cooked with onions, tomatoes, and spices.", prepTime: 10, cookTime: 30,
         ingredients: ["2 large Eggplants (Baingan)", "2 Onions, chopped", "3 Tomatoes, chopped", "1 tbsp Ginger-garlic paste", "2 Green chilies", "1 tsp Cumin seeds", "1/2 tsp Turmeric powder", "Fresh cilantro"],
         instructions: "1. Roast eggplants over open flame until skin is charred and flesh is soft.\n2. Peel and mash the roasted eggplant.\n3. Heat oil, add cumin seeds, then onions.\n4. Add ginger-garlic paste and green chilies.\n5. Add tomatoes and spices, cook until soft.\n6. Add mashed eggplant, mix well and cook for 10 minutes.",
         imageUrl: "https://placehold.co/600x400/8b5cf6/ffffff?text=Baingan+Bharta"
     },
     {
-        id: 275, name: "Masala Dosa", cuisine: "Indian", description: "Crispy South Indian crepe filled with spiced potato curry.", prepTime: 30, cookTime: 20,
+        id: 50, name: "Masala Dosa", cuisine: "Indian", description: "Crispy South Indian crepe filled with spiced potato curry.", prepTime: 30, cookTime: 20,
         ingredients: ["For batter: 2 cups Rice, 1/2 cup Urad dal", "For filling: 4 Potatoes, boiled", "1 Onion, chopped", "2 Green chilies", "1 tsp Mustard seeds", "Curry leaves", "1/2 tsp Turmeric powder"],
         instructions: "1. Soak rice and urad dal separately for 4 hours, then grind to smooth batter.\n2. Ferment batter overnight.\n3. For filling: heat oil, add mustard seeds, curry leaves, onion, chilies.\n4. Add mashed potatoes and turmeric, mix well.\n5. Make thin crepes with batter, fill with potato mixture.\n6. Serve with coconut chutney and sambar.",
         imageUrl: "https://placehold.co/600x400/fbbf24/ffffff?text=Masala+Dosa"
@@ -309,78 +309,158 @@ window.initialRecipes = [
 
     // Additional Italian Recipes  
     {
-        id: 276, name: "Arancini (Rice Balls)", cuisine: "Italian", description: "Sicilian rice balls stuffed with cheese, coated in breadcrumbs and fried until golden.", prepTime: 25, cookTime: 30,
+        id: 51, name: "Arancini (Rice Balls)", cuisine: "Italian", description: "Sicilian rice balls stuffed with cheese, coated in breadcrumbs and fried until golden.", prepTime: 25, cookTime: 30,
         ingredients: ["2 cups Arborio rice, cooked and cooled", "1 cup Mozzarella cheese, cubed", "2 Eggs, beaten", "1 cup Breadcrumbs", "1/2 cup Parmesan cheese", "Oil for frying", "Saffron (optional)"],
         instructions: "1. Mix cooled risotto with one beaten egg and Parmesan.\n2. Take a portion of rice, place cheese cube in center, form into ball.\n3. Dip rice balls in remaining beaten egg, then breadcrumbs.\n4. Deep fry until golden brown and crispy.\n5. Drain on paper towels.\n6. Serve hot as appetizer or side dish.",
         imageUrl: "https://placehold.co/600x400/f97316/ffffff?text=Arancini"
     },
     {
-        id: 277, name: "Panzanella (Tuscan Bread Salad)", cuisine: "Italian", description: "Traditional Tuscan salad made with day-old bread, tomatoes, and fresh vegetables.", prepTime: 20, cookTime: 0,
+        id: 52, name: "Panzanella (Tuscan Bread Salad)", cuisine: "Italian", description: "Traditional Tuscan salad made with day-old bread, tomatoes, and fresh vegetables.", prepTime: 20, cookTime: 0,
         ingredients: ["4 cups Day-old bread, cubed", "4 large Tomatoes, chopped", "1 Cucumber, diced", "1/2 Red onion, thinly sliced", "1/4 cup Fresh basil", "3 tbsp Red wine vinegar", "4 tbsp Olive oil"],
         instructions: "1. Soak bread cubes in water for 10 minutes, then squeeze out excess water.\n2. Combine tomatoes, cucumber, and red onion in a large bowl.\n3. Add squeezed bread and torn basil leaves.\n4. Whisk together vinegar and olive oil.\n5. Toss salad with dressing, season with salt and pepper.\n6. Let sit for 30 minutes before serving.",
         imageUrl: "https://placehold.co/600x400/dc2626/ffffff?text=Panzanella"
     },
     {
-        id: 278, name: "Focaccia", cuisine: "Italian", description: "Soft, herb-topped Italian flatbread perfect as a side or appetizer.", prepTime: 30, cookTime: 25,
+        id: 53, name: "Focaccia", cuisine: "Italian", description: "Soft, herb-topped Italian flatbread perfect as a side or appetizer.", prepTime: 30, cookTime: 25,
         ingredients: ["3 cups All-purpose flour", "1 packet Active dry yeast", "1 tsp Sugar", "1 tsp Salt", "3 tbsp Olive oil", "Fresh rosemary", "Cherry tomatoes", "Coarse sea salt"],
         instructions: "1. Mix yeast, sugar, and warm water. Let foam for 5 minutes.\n2. Combine flour and salt, add yeast mixture and olive oil.\n3. Knead until smooth, let rise for 1 hour.\n4. Press dough into oiled pan, dimple with fingers.\n5. Top with rosemary, tomatoes, and coarse salt.\n6. Bake at 425°F for 20-25 minutes until golden.",
         imageUrl: "https://placehold.co/600x400/65a30d/ffffff?text=Focaccia"
     },
     {
-        id: 279, name: "Pasta alla Norma", cuisine: "Italian", description: "Sicilian pasta with fried eggplant, tomato sauce, and ricotta salata.", prepTime: 15, cookTime: 30,
+        id: 54, name: "Pasta alla Norma", cuisine: "Italian", description: "Sicilian pasta with fried eggplant, tomato sauce, and ricotta salata.", prepTime: 15, cookTime: 30,
         ingredients: ["12 oz Pasta (rigatoni or penne)", "2 Eggplants, cubed", "2 cups Tomato sauce", "3 cloves Garlic", "1/2 cup Ricotta salata, grated", "Fresh basil", "Olive oil for frying"],
         instructions: "1. Salt eggplant cubes and let drain for 30 minutes.\n2. Fry eggplant in olive oil until golden, set aside.\n3. Cook pasta until al dente.\n4. Heat tomato sauce with garlic and basil.\n5. Toss pasta with sauce and fried eggplant.\n6. Serve topped with ricotta salata and fresh basil.",
         imageUrl: "https://placehold.co/600x400/a855f7/ffffff?text=Pasta+Norma"
     },
     {
-        id: 280, name: "Ribollita", cuisine: "Italian", description: "Hearty Tuscan soup made with vegetables, beans, and day-old bread.", prepTime: 20, cookTime: 45,
+        id: 55, name: "Ribollita", cuisine: "Italian", description: "Hearty Tuscan soup made with vegetables, beans, and day-old bread.", prepTime: 20, cookTime: 45,
         ingredients: ["2 cups Day-old bread, cubed", "1 can Cannellini beans", "1 bunch Kale, chopped", "2 Carrots, diced", "2 Celery stalks, diced", "1 Onion, diced", "4 cups Vegetable broth", "Olive oil"],
         instructions: "1. Sauté onion, carrots, and celery in olive oil.\n2. Add kale and cook until wilted.\n3. Add beans and vegetable broth, simmer 30 minutes.\n4. Add bread cubes and let them absorb liquid.\n5. Season with salt, pepper, and herbs.\n6. Let rest overnight, reheat and serve with olive oil drizzle.",
         imageUrl: "https://placehold.co/600x400/16a34a/ffffff?text=Ribollita"
     },
     {
-        id: 281, name: "Osso Buco-style Mushrooms", cuisine: "Italian", description: "Vegetarian take on the classic dish using large portobello mushrooms.", prepTime: 15, cookTime: 35,
-        ingredients: ["4 large Portobello mushroom caps", "1 Onion, diced", "2 Carrots, diced", "2 Celery stalks, diced", "1/2 cup White wine", "1 can Diced tomatoes", "2 cups Vegetable broth", "Gremolata (lemon zest, garlic, parsley)"],
-        instructions: "1. Score mushroom caps and season with salt and pepper.\n2. Sear mushrooms in olive oil until browned.\n3. Sauté vegetables until softened.\n4. Add wine and let reduce by half.\n5. Add tomatoes and broth, return mushrooms to pan.\n6. Simmer 25 minutes, serve with gremolata.",
-        imageUrl: "https://placehold.co/600x400/8b4513/ffffff?text=Mushroom+Osso+Buco"
+        id: 56, name: "Stuffed Bell Peppers", cuisine: "Italian", description: "Colorful bell peppers stuffed with rice, vegetables, and herbs, baked until tender.", prepTime: 20, cookTime: 45,
+        ingredients: ["4 large Bell peppers, tops cut off", "1 cup Cooked rice", "1 Onion, diced", "2 Carrots, diced", "2 Celery stalks, diced", "1/2 cup White wine", "1 can Diced tomatoes", "1/2 cup Parmesan cheese", "Fresh basil and oregano"],
+        instructions: "1. Preheat oven to 375°F. Remove seeds from bell peppers.\n2. Sauté onion, carrots, and celery until softened.\n3. Add wine and let reduce by half.\n4. Mix in rice, diced tomatoes, and herbs. Season with salt and pepper.\n5. Stuff peppers with the rice mixture, top with Parmesan.\n6. Bake for 35-40 minutes until peppers are tender.",
+        imageUrl: "https://placehold.co/600x400/8b4513/ffffff?text=Stuffed+Peppers"
     },
 
     // Additional Mexican Recipes
     {
-        id: 282, name: "Chiles en Nogada", cuisine: "Mexican", description: "Roasted poblano peppers stuffed with fruit and nut mixture, topped with walnut cream sauce.", prepTime: 45, cookTime: 30,
+        id: 57, name: "Chiles en Nogada", cuisine: "Mexican", description: "Roasted poblano peppers stuffed with fruit and nut mixture, topped with walnut cream sauce.", prepTime: 45, cookTime: 30,
         ingredients: ["6 Poblano peppers", "1 cup Walnuts", "1/2 cup Mexican crema", "2 cups Mixed fruits (apple, pear, peach)", "1/2 cup Almonds", "1/4 cup Raisins", "Pomegranate seeds", "Fresh cheese"],
         instructions: "1. Roast and peel poblano peppers, remove seeds carefully.\n2. Soak walnuts in hot water, peel and blend with crema.\n3. Sauté diced fruits with almonds and raisins.\n4. Stuff peppers with fruit mixture.\n5. Top with walnut cream sauce.\n6. Garnish with pomegranate seeds.",
         imageUrl: "https://placehold.co/600x400/16a34a/ffffff?text=Chiles+en+Nogada"
     },
     {
-        id: 283, name: "Pozole Verde", cuisine: "Mexican", description: "Green pozole soup made with hominy, tomatillos, and green chilies.", prepTime: 20, cookTime: 40,
+        id: 58, name: "Pozole Verde", cuisine: "Mexican", description: "Green pozole soup made with hominy, tomatillos, and green chilies.", prepTime: 20, cookTime: 40,
         ingredients: ["2 cups Hominy, cooked", "1 lb Tomatillos", "2 Poblano peppers", "1 bunch Cilantro", "1 White onion", "4 cups Vegetable broth", "2 Serrano chilies", "Oregano", "Lime wedges"],
         instructions: "1. Roast tomatillos and poblano peppers until charred.\n2. Blend roasted vegetables with cilantro and serrano chilies.\n3. Strain the green sauce.\n4. Simmer sauce with vegetable broth for 20 minutes.\n5. Add hominy and cook for 15 minutes.\n6. Serve with oregano, onion, and lime.",
         imageUrl: "https://placehold.co/600x400/65a30d/ffffff?text=Pozole+Verde"
     },
     {
-        id: 284, name: "Elote (Mexican Street Corn)", cuisine: "Mexican", description: "Grilled corn on the cob slathered with mayonnaise, cheese, and chili powder.", prepTime: 5, cookTime: 15,
+        id: 59, name: "Elote (Mexican Street Corn)", cuisine: "Mexican", description: "Grilled corn on the cob slathered with mayonnaise, cheese, and chili powder.", prepTime: 5, cookTime: 15,
         ingredients: ["4 ears Corn", "1/4 cup Mayonnaise", "1/4 cup Cotija cheese, crumbled", "1 tsp Chili powder", "1 Lime, cut in wedges", "Cilantro, chopped"],
         instructions: "1. Grill corn over medium-high heat, turning occasionally.\n2. Cook until kernels are lightly charred, about 10-15 minutes.\n3. Brush corn with mayonnaise.\n4. Sprinkle with crumbled cotija cheese.\n5. Dust with chili powder.\n6. Serve with lime wedges and cilantro.",
         imageUrl: "https://placehold.co/600x400/fbbf24/ffffff?text=Elote"
     },
     {
-        id: 285, name: "Tamales de Dulce", cuisine: "Mexican", description: "Sweet tamales made with masa, raisins, and cinnamon, steamed in corn husks.", prepTime: 60, cookTime: 90,
+        id: 60, name: "Tamales de Dulce", cuisine: "Mexican", description: "Sweet tamales made with masa, raisins, and cinnamon, steamed in corn husks.", prepTime: 60, cookTime: 90,
         ingredients: ["2 cups Masa harina", "1/2 cup Vegetable shortening", "1/2 cup Sugar", "1 tsp Baking powder", "1 tsp Cinnamon", "1/2 cup Raisins", "Pink food coloring", "Corn husks, soaked"],
         instructions: "1. Beat shortening until fluffy, add sugar and beat well.\n2. Mix masa harina, baking powder, and cinnamon.\n3. Combine wet and dry ingredients, add coloring.\n4. Spread masa on corn husks, add raisins.\n5. Fold husks and tie with strips.\n6. Steam for 60-90 minutes until masa pulls away from husk.",
         imageUrl: "https://placehold.co/600x400/f97316/ffffff?text=Tamales+de+Dulce"
     },
     {
-        id: 286, name: "Sopa de Tortilla", cuisine: "Mexican", description: "Traditional Mexican soup with tomato broth, topped with crispy tortilla strips and avocado.", prepTime: 15, cookTime: 25,
+        id: 61, name: "Sopa de Tortilla", cuisine: "Mexican", description: "Traditional Mexican soup with tomato broth, topped with crispy tortilla strips and avocado.", prepTime: 15, cookTime: 25,
         ingredients: ["6 Roma tomatoes", "1/4 White onion", "2 cloves Garlic", "4 cups Vegetable broth", "4 Corn tortillas, cut in strips", "1 Avocado", "Mexican crema", "Queso fresco", "Pasilla chilies"],
         instructions: "1. Char tomatoes, onion, and garlic on comal or skillet.\n2. Blend charred vegetables with a little broth.\n3. Strain mixture into a pot and simmer.\n4. Add remaining broth and season with salt.\n5. Fry tortilla strips until crispy.\n6. Serve soup topped with tortilla strips, avocado, and cheese.",
         imageUrl: "https://placehold.co/600x400/dc2626/ffffff?text=Sopa+de+Tortilla"
     },
     {
-        id: 287, name: "Rajas con Crema", cuisine: "Mexican", description: "Roasted poblano pepper strips in a creamy sauce, a classic Mexican side dish.", prepTime: 20, cookTime: 15,
+        id: 62, name: "Rajas con Crema", cuisine: "Mexican", description: "Roasted poblano pepper strips in a creamy sauce, a classic Mexican side dish.", prepTime: 20, cookTime: 15,
         ingredients: ["6 Poblano peppers", "1 White onion, sliced", "1 cup Mexican crema", "1 cup Corn kernels", "1/2 cup Queso fresco", "Salt and pepper"],
         instructions: "1. Roast poblano peppers until skin is charred.\n2. Place in plastic bag to steam, then peel and cut into strips.\n3. Sauté onion until translucent.\n4. Add poblano strips and corn, cook 5 minutes.\n5. Stir in Mexican crema and simmer gently.\n6. Top with crumbled queso fresco before serving.",
         imageUrl: "https://placehold.co/600x400/16a34a/ffffff?text=Rajas+con+Crema"
+    },
+    
+    // Additional Mediterranean Recipes
+    {
+        id: 63, name: "Greek Moussaka", cuisine: "Mediterranean", description: "Layered casserole with eggplant, lentils, and creamy béchamel sauce.", prepTime: 30, cookTime: 60,
+        ingredients: ["2 large Eggplants, sliced", "1 cup Green lentils, cooked", "2 Onions, chopped", "3 Tomatoes, diced", "1/2 cup Red wine", "2 cups Milk", "3 tbsp Flour", "3 tbsp Butter", "1/2 cup Parmesan cheese"],
+        instructions: "1. Salt eggplant slices and drain for 30 minutes. Brush with oil and bake until golden.\n2. Sauté onions, add cooked lentils, tomatoes, and wine. Simmer until thick.\n3. Make béchamel: melt butter, whisk in flour, gradually add milk until thick.\n4. Layer eggplant, lentil mixture, and béchamel in baking dish.\n5. Top with Parmesan and bake at 375°F for 45 minutes until golden.",
+        imageUrl: "https://placehold.co/600x400/3b82f6/ffffff?text=Greek+Moussaka"
+    },
+    {
+        id: 64, name: "Spanish Tortilla", cuisine: "Spanish", description: "Thick potato and egg omelet, a classic Spanish comfort food.", prepTime: 15, cookTime: 25,
+        ingredients: ["4 large Potatoes, thinly sliced", "6 Eggs", "1 large Onion, sliced", "1/2 cup Olive oil", "Salt to taste"],
+        instructions: "1. Heat olive oil in a large pan. Cook potatoes and onions slowly until tender.\n2. Drain potatoes and onions, reserving oil.\n3. Beat eggs in a large bowl, add potato mixture and salt.\n4. Heat 2 tbsp reserved oil in pan. Add egg mixture and cook on low heat.\n5. When edges are set, flip tortilla using a plate. Cook other side until golden.\n6. Serve warm or at room temperature.",
+        imageUrl: "https://placehold.co/600x400/f59e0b/ffffff?text=Spanish+Tortilla"
+    },
+    {
+        id: 65, name: "Mediterranean Stuffed Tomatoes", cuisine: "Mediterranean", description: "Large tomatoes stuffed with rice, herbs, and pine nuts, drizzled with olive oil.", prepTime: 20, cookTime: 40,
+        ingredients: ["6 large Tomatoes", "1 cup Rice", "1/4 cup Pine nuts", "1/4 cup Raisins", "1 bunch Fresh parsley", "1 bunch Fresh mint", "1/4 cup Olive oil", "1 Onion, finely chopped"],
+        instructions: "1. Cut tops off tomatoes, scoop out flesh and chop.\n2. Sauté onion in olive oil, add rice and chopped tomato flesh.\n3. Add pine nuts, raisins, herbs, and 2 cups water. Simmer until rice is tender.\n4. Stuff tomatoes with rice mixture.\n5. Place in baking dish with a little water, drizzle with olive oil.\n6. Bake at 375°F for 30-35 minutes.",
+        imageUrl: "https://placehold.co/600x400/dc2626/ffffff?text=Stuffed+Tomatoes"
+    },
+
+    // Asian Vegetarian Recipes
+    {
+        id: 66, name: "Thai Green Curry", cuisine: "Thai", description: "Aromatic coconut curry with vegetables and Thai basil.", prepTime: 15, cookTime: 20,
+        ingredients: ["2 tbsp Green curry paste", "1 can Coconut milk", "2 cups Mixed vegetables (eggplant, bell peppers, bamboo shoots)", "1 tbsp Soy sauce", "1 tbsp Palm sugar", "Thai basil leaves", "Lime juice"],
+        instructions: "1. Heat thick coconut milk, add curry paste and fry until fragrant.\n2. Add remaining coconut milk and bring to a boil.\n3. Add vegetables and simmer until tender.\n4. Season with soy sauce, palm sugar, and lime juice.\n5. Add Thai basil leaves just before serving.\n6. Serve with jasmine rice.",
+        imageUrl: "https://placehold.co/600x400/16a34a/ffffff?text=Thai+Green+Curry"
+    },
+    {
+        id: 67, name: "Korean Bibimbap", cuisine: "Korean", description: "Mixed rice bowl with seasoned vegetables, served with spicy gochujang sauce.", prepTime: 25, cookTime: 30,
+        ingredients: ["2 cups Cooked rice", "1 cup Spinach", "1 cup Carrots, julienned", "1 cup Bean sprouts", "1 cup Zucchini, julienned", "1 cup Cucumber, julienned", "2 Eggs", "2 tbsp Gochujang", "Sesame oil", "Sesame seeds"],
+        instructions: "1. Blanch and season each vegetable separately with sesame oil, salt, and garlic.\n2. Marinate cucumber strips with sesame oil and salt.\n3. Fry eggs sunny-side up.\n4. Arrange rice in bowls, top with vegetables in separate sections.\n5. Place fried egg on top, sprinkle with sesame seeds.\n6. Serve with gochujang sauce on the side.",
+        imageUrl: "https://placehold.co/600x400/dc2626/ffffff?text=Bibimbap"
+    },
+    {
+        id: 68, name: "Japanese Vegetable Tempura", cuisine: "Japanese", description: "Light and crispy battered vegetables, served with dipping sauce.", prepTime: 20, cookTime: 15,
+        ingredients: ["Mixed vegetables (sweet potato, eggplant, bell peppers, broccoli)", "1 cup Ice-cold water", "1 cup Flour", "1 Egg yolk", "Oil for deep frying", "For sauce: 1/4 cup Soy sauce, 2 tbsp Mirin, 1 tbsp Rice vinegar"],
+        instructions: "1. Cut vegetables into bite-sized pieces.\n2. Mix egg yolk with ice-cold water, lightly fold in flour (don't overmix).\n3. Heat oil to 340°F. Dip vegetables in batter and fry until golden.\n4. Drain on paper towels.\n5. Mix sauce ingredients together.\n6. Serve tempura immediately with dipping sauce.",
+        imageUrl: "https://placehold.co/600x400/fbbf24/ffffff?text=Vegetable+Tempura"
+    },
+
+    // Middle Eastern Recipes
+    {
+        id: 69, name: "Falafel", cuisine: "Middle Eastern", description: "Crispy deep-fried balls made from chickpeas and herbs.", prepTime: 20, cookTime: 15,
+        ingredients: ["2 cups Dried chickpeas, soaked overnight", "1/2 cup Fresh parsley", "1/4 cup Fresh cilantro", "1 small Onion", "4 cloves Garlic", "1 tsp Cumin", "1 tsp Coriander", "Oil for frying"],
+        instructions: "1. Drain chickpeas (don't cook them). Add to food processor with herbs, onion, and garlic.\n2. Pulse until mixture is coarse but holds together.\n3. Add spices and salt, mix well.\n4. Form into small balls and chill for 30 minutes.\n5. Deep fry in hot oil until golden brown and crispy.\n6. Serve with tahini sauce and pita bread.",
+        imageUrl: "https://placehold.co/600x400/d97706/ffffff?text=Falafel"
+    },
+    {
+        id: 70, name: "Tabbouleh", cuisine: "Middle Eastern", description: "Fresh parsley salad with bulgur, tomatoes, and lemon dressing.", prepTime: 30, cookTime: 0,
+        ingredients: ["2 cups Fresh parsley, finely chopped", "1/4 cup Bulgur wheat", "2 Tomatoes, diced", "1/2 cup Green onions, chopped", "1/4 cup Fresh mint", "1/4 cup Lemon juice", "1/4 cup Olive oil"],
+        instructions: "1. Soak bulgur in hot water for 20 minutes until tender. Drain well.\n2. Mix parsley, mint, tomatoes, and green onions in a large bowl.\n3. Add drained bulgur and mix well.\n4. Whisk together lemon juice and olive oil.\n5. Pour dressing over salad and toss.\n6. Chill for at least 1 hour before serving.",
+        imageUrl: "https://placehold.co/600x400/84cc16/ffffff?text=Tabbouleh"
+    },
+    {
+        id: 71, name: "Stuffed Grape Leaves", cuisine: "Middle Eastern", description: "Tender grape leaves stuffed with rice, herbs, and spices.", prepTime: 45, cookTime: 30,
+        ingredients: ["30 Grape leaves, blanched", "1 cup Rice", "1/4 cup Pine nuts", "1 Onion, finely chopped", "1/4 cup Fresh dill", "1/4 cup Fresh parsley", "1/4 cup Lemon juice", "1/4 cup Olive oil"],
+        instructions: "1. Sauté onion in olive oil until soft. Add rice and cook for 2 minutes.\n2. Add pine nuts, herbs, lemon juice, and 1 cup water. Simmer until rice is tender.\n3. Place a spoonful of filling on each grape leaf, roll tightly.\n4. Arrange rolls in a pot, drizzle with olive oil and lemon juice.\n5. Add enough water to cover, place a plate on top to weigh down.\n6. Simmer for 25-30 minutes until tender.",
+        imageUrl: "https://placehold.co/600x400/65a30d/ffffff?text=Stuffed+Grape+Leaves"
+    },
+
+    // More International Options
+    {
+        id: 72, name: "Ethiopian Lentil Stew (Misir Wot)", cuisine: "Ethiopian", description: "Spicy red lentil stew with berbere spice blend.", prepTime: 10, cookTime: 25,
+        ingredients: ["1 cup Red lentils", "2 tbsp Berbere spice blend", "1 Onion, chopped", "3 cloves Garlic, minced", "1 tbsp Ginger, minced", "2 tbsp Olive oil", "2 cups Vegetable broth", "Salt to taste"],
+        instructions: "1. Heat oil in a pot, sauté onion until golden.\n2. Add garlic and ginger, cook for 1 minute.\n3. Add berbere spice and cook until fragrant.\n4. Add lentils and vegetable broth, bring to a boil.\n5. Reduce heat and simmer for 20 minutes until lentils are soft.\n6. Season with salt and serve with injera or rice.",
+        imageUrl: "https://placehold.co/600x400/dc2626/ffffff?text=Lentil+Stew"
+    },
+    {
+        id: 73, name: "Moroccan Tagine", cuisine: "Moroccan", description: "Slow-cooked vegetable stew with warm spices and dried fruits.", prepTime: 20, cookTime: 45,
+        ingredients: ["2 cups Mixed vegetables (carrots, zucchini, bell peppers)", "1 can Chickpeas", "1/2 cup Dried apricots", "1 Onion, sliced", "2 tsp Ras el hanout spice", "1 can Diced tomatoes", "1 cup Vegetable broth", "Fresh cilantro"],
+        instructions: "1. Sauté onion until soft, add ras el hanout spice.\n2. Add vegetables and cook for 5 minutes.\n3. Add tomatoes, chickpeas, apricots, and broth.\n4. Bring to a boil, then reduce heat and simmer covered for 30 minutes.\n5. Cook uncovered for 10 minutes to thicken.\n6. Garnish with fresh cilantro and serve with couscous.",
+        imageUrl: "https://placehold.co/600x400/f97316/ffffff?text=Moroccan+Tagine"
+    },
+    {
+        id: 74, name: "Brazilian Black Bean Stew (Feijoada)", cuisine: "Brazilian", description: "Rich and hearty black bean stew with vegetables and spices.", prepTime: 15, cookTime: 60,
+        ingredients: ["2 cups Black beans, soaked overnight", "1 Onion, chopped", "4 cloves Garlic, minced", "1 Bell pepper, chopped", "2 Bay leaves", "1 tsp Cumin", "1 tsp Smoked paprika", "2 tbsp Olive oil", "Orange zest"],
+        instructions: "1. Cook soaked black beans with bay leaves for 45 minutes until tender.\n2. Heat oil, sauté onion, garlic, and bell pepper until soft.\n3. Add cumin and smoked paprika, cook for 1 minute.\n4. Add cooked beans with cooking liquid to the vegetable mixture.\n5. Simmer for 15 minutes, mashing some beans to thicken.\n6. Finish with orange zest and serve with rice.",
+        imageUrl: "https://placehold.co/600x400/1f2937/ffffff?text=Black+Bean+Stew"
     }
 ];
 
