@@ -22,25 +22,21 @@
         html {
             scroll-behavior: smooth;
         }
-        /* Mobile touch improvements */
-        @media (max-width: 640px) {
-            .cursor-grab {
-                cursor: pointer;
-            }
-            .active:cursor-grabbing {
-                cursor: pointer;
-            }
-        }
-        /* Style for the element being dragged */
-        .dragging {
-            opacity: 0.5;
-            border: 2px dashed #fbbf24; /* Tailwind amber-400 */
-        }
-        /* Style for the drop zone when dragging over it */
-        .drag-over {
-            background-color: #fef3c7; /* Tailwind amber-100 */
+        /* Selected recipe styling */
+        .recipe-selected {
+            border: 2px solid #10b981; /* Tailwind emerald-500 */
+            background-color: #d1fae5; /* Tailwind emerald-100 */
             transform: scale(1.02);
-            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        /* Clickable meal slot styling */
+        .meal-slot-clickable {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .meal-slot-clickable:hover {
+            background-color: #f3f4f6; /* Tailwind gray-100 */
+            transform: scale(1.02);
         }
         /* Hide the scrollbar but keep it scrollable */
         #recipe-list::-webkit-scrollbar {
@@ -231,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     let weeklyPlan = loadPlanFromLocalStorage() || {};
     let shoppingList = loadShoppingListFromLocalStorage() || [];
+    let selectedRecipeId = null;
 
     function saveRecipesToLocalStorage(recipes) {
         const userRecipes = recipes.filter(r => r.id > 1000); // Only save user-added recipes
@@ -263,8 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         filteredRecipes.forEach(recipe => {
             const recipeCard = document.createElement('div');
-            recipeCard.className = 'p-3 sm:p-4 border border-gray-200 rounded-lg flex gap-3 sm:gap-4 items-center bg-white shadow-sm hover:shadow-md cursor-grab active:cursor-grabbing transition-all duration-200';
-            recipeCard.setAttribute('draggable', 'true');
+            recipeCard.className = 'p-3 sm:p-4 border border-gray-200 rounded-lg flex gap-3 sm:gap-4 items-center bg-white shadow-sm hover:shadow-md cursor-pointer transition-all duration-200';
             recipeCard.dataset.recipeId = recipe.id;
             
             recipeCard.innerHTML = `
@@ -297,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const recipe = recipeId ? allRecipes.find(r => r.id == recipeId) : null;
                 
                 const mealSlot = document.createElement('div');
-                mealSlot.className = 'meal-slot bg-white p-2 sm:p-3 rounded-lg min-h-[70px] sm:min-h-[80px] flex flex-col justify-center items-center text-center transition-all duration-200 hover:shadow-sm border border-gray-100';
+                mealSlot.className = 'meal-slot meal-slot-clickable bg-white p-2 sm:p-3 rounded-lg min-h-[70px] sm:min-h-[80px] flex flex-col justify-center items-center text-center transition-all duration-200 hover:shadow-sm border border-gray-100';
                 mealSlot.dataset.slotId = mealSlotId;
 
                 if (recipe) {
@@ -519,11 +515,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    recipeList.addEventListener('click', (e) => {
-        if (e.target.classList.contains('view-btn')) {
-            showRecipeModal(e.target.dataset.recipeId);
-        }
-    });
 
     recipeModal.addEventListener('click', (e) => {
         if (e.target === recipeModal) {
@@ -536,52 +527,50 @@ document.addEventListener('DOMContentLoaded', () => {
             delete weeklyPlan[e.target.dataset.slotId];
             renderPlanner();
             savePlanToLocalStorage();
-        }
-        if (e.target.classList.contains('view-recipe-btn')) {
+        } else if (e.target.classList.contains('view-recipe-btn')) {
             showRecipeModal(e.target.dataset.recipeId);
+        } else {
+            // Check if clicking on an empty meal slot
+            const mealSlot = e.target.closest('.meal-slot');
+            if (mealSlot && mealSlot.dataset.slotId) {
+                const slotId = mealSlot.dataset.slotId;
+                // Only add recipe if a recipe is selected
+                if (selectedRecipeId) {
+                    addRecipeToSlot(slotId);
+                }
+            }
         }
     });
 
-    // Drag and Drop Logic
-    let draggedItemId = null;
+    // Click-to-Add Logic
+    function selectRecipe(recipeId) {
+        selectedRecipeId = recipeId;
+        // Update visual selection
+        document.querySelectorAll('.recipe-selected').forEach(card => {
+            card.classList.remove('recipe-selected');
+        });
+        const selectedCard = document.querySelector(`[data-recipe-id="${recipeId}"]`);
+        if (selectedCard) {
+            selectedCard.classList.add('recipe-selected');
+        }
+    }
 
-    recipeList.addEventListener('dragstart', (e) => {
-        if (e.target.dataset.recipeId) {
-            draggedItemId = e.target.dataset.recipeId;
-            e.target.classList.add('dragging');
-        }
-    });
-
-    recipeList.addEventListener('dragend', (e) => {
-        if (e.target.dataset.recipeId) {
-            draggedItemId = null;
-            e.target.classList.remove('dragging');
-        }
-    });
-    
-    weeklyPlanner.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        const slot = e.target.closest('.meal-slot');
-        if (slot) {
-            slot.classList.add('drag-over');
-        }
-    });
-    
-    weeklyPlanner.addEventListener('dragleave', (e) => {
-        const slot = e.target.closest('.meal-slot');
-        if (slot) {
-            slot.classList.remove('drag-over');
-        }
-    });
-
-    weeklyPlanner.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const slot = e.target.closest('.meal-slot');
-        if (slot && draggedItemId) {
-            slot.classList.remove('drag-over');
-            weeklyPlan[slot.dataset.slotId] = draggedItemId;
+    function addRecipeToSlot(slotId) {
+        if (selectedRecipeId) {
+            weeklyPlan[slotId] = selectedRecipeId;
             renderPlanner();
             savePlanToLocalStorage();
+        }
+    }
+
+    // Recipe selection event listener
+    recipeList.addEventListener('click', (e) => {
+        const recipeCard = e.target.closest('[data-recipe-id]');
+        if (recipeCard && !e.target.classList.contains('view-btn')) {
+            selectRecipe(recipeCard.dataset.recipeId);
+        }
+        if (e.target.classList.contains('view-btn')) {
+            showRecipeModal(e.target.dataset.recipeId);
         }
     });
     
