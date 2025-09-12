@@ -221,7 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     mealSlot.innerHTML = `
                         <p class="text-sm font-semibold">${recipe.name}</p>
                         <p class="text-xs text-gray-500">${meal}</p>
-                        <button class="remove-btn text-red-500 text-xs mt-1" data-slot-id="${mealSlotId}">Remove</button>
+                        <div class="flex gap-1 mt-1">
+                            <button class="view-recipe-btn bg-blue-500 hover:bg-blue-600 text-white text-xs px-2 py-1 rounded" data-recipe-id="${recipe.id}">View</button>
+                            <button class="remove-btn text-red-500 text-xs px-2 py-1" data-slot-id="${mealSlotId}">Remove</button>
+                        </div>
                     `;
                 } else {
                     mealSlot.innerHTML = `<span class="text-gray-400 text-sm">${meal}</span>`;
@@ -329,6 +332,9 @@ document.addEventListener('DOMContentLoaded', () => {
             delete weeklyPlan[e.target.dataset.slotId];
             renderPlanner();
             savePlanToLocalStorage();
+        }
+        if (e.target.classList.contains('view-recipe-btn')) {
+            showRecipeModal(e.target.dataset.recipeId);
         }
     });
 
