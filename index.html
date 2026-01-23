@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VeggiPlan: Vegetarian Meal Planner</title>
+    <title>Recipe Collector</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -130,10 +130,10 @@
         <header class="text-center mb-12 sm:mb-16">
             <div class="inline-block p-8 rounded-3xl glass-card mb-8">
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent leading-tight mb-4">
-                    🥬 VeggiPlan
+                    Recipe Collector
                 </h1>
                 <p class="text-white/90 mt-4 text-lg sm:text-xl lg:text-2xl px-4 sm:px-0 font-light leading-relaxed max-w-3xl mx-auto">
-                    Experience modern meal planning with curated vegetarian recipes from around the world
+                    Collect and organize your favorite recipes with customizable serving sizes
                 </p>
             </div>
             <div id="refresh-indicator" class="mt-6 p-4 glass-card-dark text-white rounded-2xl text-sm font-medium inline-block" style="display: none;">
@@ -141,9 +141,9 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            <!-- Weekly Planner Section -->
-            <div class="lg:col-span-2 glass-card p-6 sm:p-8 rounded-3xl shadow-2xl">
+        <div class="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8">
+            <!-- Weekly Planner Section - HIDDEN -->
+            <div class="lg:col-span-2 glass-card p-6 sm:p-8 rounded-3xl shadow-2xl" style="display: none;">
                 <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-3">
                     <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">Your Weekly Plan</h2>
                     <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
@@ -156,12 +156,18 @@
                 </div>
             </div>
 
-            <!-- Sidebar with Recipe Library and Shopping List -->
-            <div class="lg:col-span-1 space-y-4 sm:space-y-6 lg:space-y-8">
+            <!-- Recipe Library - Now Full Width -->
+            <div class="space-y-4 sm:space-y-6 lg:space-y-8">
                 
-                <!-- Recipe Library Section -->
+                <!-- Recipe Library Section - Now Primary -->
                 <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-2xl">
-                    <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-white">Recipe Library</h2>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white">My Recipes</h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="import-url-btn" class="btn-primary text-white font-semibold py-2.5 px-5 rounded-2xl text-sm">Import from URL</button>
+                            <button id="add-recipe-btn" class="btn-secondary font-semibold py-2.5 px-5 rounded-2xl text-sm">Add Manually</button>
+                        </div>
+                    </div>
                     <div class="flex flex-wrap gap-2 sm:gap-3 mb-6">
                         <button class="filter-btn btn-primary text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all" data-cuisine="all">All</button>
                         <button class="filter-btn glass-card-dark text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all hover:bg-white/20" data-cuisine="Indian">Indian</button>
@@ -170,26 +176,19 @@
                         <button class="filter-btn glass-card-dark text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all hover:bg-white/20" data-cuisine="Gujarati">Gujarati</button>
                         <button class="filter-btn glass-card-dark text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all hover:bg-white/20" data-cuisine="Mediterranean">Mediterranean</button>
                         <button class="filter-btn glass-card-dark text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all hover:bg-white/20" data-cuisine="Thai">Thai</button>
-                        <button id="refresh-recipes-btn" class="btn-secondary px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all" title="Get new recipes">
-                            🔄 New Recipes
-                        </button>
                     </div>
-                    <div id="recipe-list" class="space-y-3 sm:space-y-4 max-h-[40vh] overflow-y-auto pr-1 sm:pr-2">
+                    <div id="recipe-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto pr-1 sm:pr-2">
                         <!-- Recipe cards will be generated by JS -->
                     </div>
-                    <div class="mt-6 space-y-3">
-                        <button id="import-url-btn" class="w-full btn-primary text-white font-semibold py-4 px-6 rounded-2xl text-sm sm:text-base">🔗 Import from URL</button>
-                        <button id="add-recipe-btn" class="w-full btn-secondary font-semibold py-4 px-6 rounded-2xl text-sm sm:text-base">➕ Add Manually</button>
-                        <div class="grid grid-cols-2 gap-3">
-                            <button id="export-recipes-btn" class="btn-secondary font-semibold py-3 px-4 rounded-2xl text-xs sm:text-sm">📥 Export Data</button>
-                            <button id="import-json-btn" class="btn-secondary font-semibold py-3 px-4 rounded-2xl text-xs sm:text-sm">📤 Import Data</button>
-                        </div>
+                    <div class="mt-6 pt-6 border-t border-white/20 flex flex-wrap gap-3 justify-center">
+                        <button id="export-recipes-btn" class="btn-secondary font-semibold py-2.5 px-5 rounded-2xl text-sm">Export Data</button>
+                        <button id="import-json-btn" class="btn-secondary font-semibold py-2.5 px-5 rounded-2xl text-sm">Import Data</button>
                     </div>
                     <input type="file" id="import-json-file" accept=".json" class="hidden">
                 </div>
 
-                <!-- Shopping List Section -->
-                <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-2xl">
+                <!-- Shopping List Section - HIDDEN -->
+                <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-2xl" style="display: none;">
                     <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                         <h2 class="text-2xl sm:text-3xl font-bold text-white">Shopping List</h2>
                         <div class="flex gap-3">
@@ -219,9 +218,9 @@
         </div>
     </div>
 
-    <!-- Recipe Detail Modal -->
-    <div id="recipe-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 hidden z-50">
-        <div id="modal-content" class="modal-enter glass-card rounded-3xl shadow-2xl w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+    <!-- Full-Screen Recipe Detail View -->
+    <div id="recipe-modal" class="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 hidden z-50 overflow-y-auto">
+        <div id="modal-content" class="min-h-screen">
              <!-- Content will be injected by JS -->
         </div>
     </div>
@@ -408,24 +407,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     function renderRecipes(filter = 'all') {
         recipeList.innerHTML = '';
         const filteredRecipes = filter === 'all' ? allRecipes : allRecipes.filter(recipe => recipe.cuisine === filter);
-        
+
+        if (filteredRecipes.length === 0) {
+            recipeList.innerHTML = `
+                <div class="col-span-full text-center py-12 text-white/70">
+                    <div class="text-4xl mb-4">📚</div>
+                    <p class="text-lg mb-2">No recipes yet</p>
+                    <p class="text-sm opacity-80">Import a recipe from URL or add one manually</p>
+                </div>
+            `;
+            return;
+        }
+
         filteredRecipes.forEach(recipe => {
             const recipeCard = document.createElement('div');
-            recipeCard.className = 'p-3 sm:p-4 border border-gray-200 rounded-lg flex gap-3 sm:gap-4 items-center bg-white shadow-sm hover:shadow-md cursor-pointer transition-all duration-200';
+            recipeCard.className = 'recipe-card p-4 rounded-2xl cursor-pointer';
             recipeCard.dataset.recipeId = recipe.id;
-            
+
             recipeCard.innerHTML = `
-                <img src="${recipe.imageUrl || 'https://placehold.co/80x80/e2e8f0/cbd5e0?text=Food'}" alt="${recipe.name}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-md object-cover flex-shrink-0">
-                <div class="flex-1 min-w-0">
-                    <h3 class="font-semibold text-gray-800 text-sm sm:text-base leading-tight mb-1 truncate">${recipe.name}</h3>
-                    <p class="text-xs sm:text-sm text-gray-500">${recipe.cuisine}</p>
-                    <div class="flex gap-1 text-xs text-gray-400 mt-1">
-                        <span>${recipe.prepTime}m prep</span>
-                        <span>•</span>
-                        <span>${recipe.cookTime}m cook</span>
-                    </div>
+                <div class="aspect-video mb-3 rounded-xl overflow-hidden bg-white/10">
+                    <img src="${recipe.imageUrl || 'https://placehold.co/300x200/667eea/white?text=Recipe'}" alt="${recipe.name}" class="w-full h-full object-cover">
                 </div>
-                <button class="view-btn bg-blue-500 hover:bg-blue-600 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors flex-shrink-0" data-recipe-id="${recipe.id}">View</button>
+                <h3 class="font-semibold text-white text-base leading-tight mb-1 line-clamp-2">${recipe.name}</h3>
+                <p class="text-xs text-white/70 mb-2">${recipe.cuisine}</p>
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-2 text-xs text-white/60">
+                        <span>${recipe.prepTime + recipe.cookTime} min</span>
+                        ${recipe.servings ? `<span>• ${recipe.servings} servings</span>` : ''}
+                    </div>
+                    <button class="view-btn bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors" data-recipe-id="${recipe.id}">View</button>
+                </div>
             `;
             recipeList.appendChild(recipeCard);
         });
@@ -596,58 +607,228 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.open(krogerUrl, '_blank');
     }
     
+    // Current serving size for recipe detail view
+    let currentServings = 4;
+    let originalServings = 4;
+    let currentRecipeIngredients = [];
+
+    // Ingredient scaling functions
+    const unicodeFractions = {
+        '½': 0.5, '⅓': 1/3, '⅔': 2/3, '¼': 0.25, '¾': 0.75,
+        '⅕': 0.2, '⅖': 0.4, '⅗': 0.6, '⅘': 0.8,
+        '⅙': 1/6, '⅚': 5/6, '⅛': 0.125, '⅜': 0.375, '⅝': 0.625, '⅞': 0.875
+    };
+
+    function parseFraction(str) {
+        // Check for unicode fractions
+        for (const [frac, val] of Object.entries(unicodeFractions)) {
+            if (str.includes(frac)) {
+                const parts = str.split(frac);
+                const whole = parts[0].trim() ? parseFloat(parts[0]) : 0;
+                return whole + val;
+            }
+        }
+        // Check for slash fractions like 1/2
+        if (str.includes('/')) {
+            const parts = str.split('/');
+            if (parts.length === 2) {
+                return parseFloat(parts[0]) / parseFloat(parts[1]);
+            }
+        }
+        return parseFloat(str);
+    }
+
+    function formatQuantity(num) {
+        if (isNaN(num) || num === 0) return '';
+
+        // Round to reasonable precision
+        num = Math.round(num * 8) / 8;
+
+        const whole = Math.floor(num);
+        const frac = num - whole;
+
+        // Convert common fractions
+        const fractionMap = {
+            0.125: '⅛', 0.25: '¼', 0.333: '⅓', 0.375: '⅜',
+            0.5: '½', 0.625: '⅝', 0.667: '⅔', 0.75: '¾', 0.875: '⅞'
+        };
+
+        let fracStr = '';
+        for (const [val, symbol] of Object.entries(fractionMap)) {
+            if (Math.abs(frac - parseFloat(val)) < 0.05) {
+                fracStr = symbol;
+                break;
+            }
+        }
+
+        if (whole === 0 && fracStr) return fracStr;
+        if (fracStr) return `${whole} ${fracStr}`;
+        if (whole === num) return whole.toString();
+        return num.toFixed(1).replace(/\.0$/, '');
+    }
+
+    function scaleIngredient(ingredient, origServings, newServings) {
+        if (!ingredient || origServings === newServings) return ingredient;
+
+        const ratio = newServings / origServings;
+
+        // Pattern to match quantity at the start
+        // Matches: "2", "1.5", "1/2", "1 1/2", "½", "1½", "2-3"
+        const quantityPattern = /^(\d+\s*)?([½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|\d+\/\d+|\d+\.?\d*)\s*(-\s*(\d+\s*)?([½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|\d+\/\d+|\d+\.?\d*))?\s*/i;
+
+        const match = ingredient.match(quantityPattern);
+
+        if (!match || !match[0].trim()) {
+            // No quantity found (e.g., "Salt to taste")
+            return ingredient;
+        }
+
+        const fullMatch = match[0];
+        const rest = ingredient.slice(fullMatch.length);
+
+        // Parse the first quantity
+        let qty1Str = (match[1] || '') + (match[2] || '');
+        let qty1 = parseFraction(qty1Str.trim());
+
+        if (isNaN(qty1)) return ingredient;
+
+        // Check if there's a range (e.g., "2-3")
+        if (match[3]) {
+            let qty2Str = (match[4] || '') + (match[5] || '');
+            let qty2 = parseFraction(qty2Str.trim());
+
+            if (!isNaN(qty2)) {
+                const scaled1 = formatQuantity(qty1 * ratio);
+                const scaled2 = formatQuantity(qty2 * ratio);
+                return `${scaled1}-${scaled2} ${rest}`.trim();
+            }
+        }
+
+        // Single quantity
+        const scaled = formatQuantity(qty1 * ratio);
+        return `${scaled} ${rest}`.trim();
+    }
+
     function showRecipeModal(recipeId) {
         const recipe = allRecipes.find(r => r.id == recipeId);
         if (!recipe) return;
 
+        // Parse original servings from recipe
+        originalServings = parseServings(recipe.servings) || 4;
+        currentServings = originalServings;
+        currentRecipeIngredients = recipe.ingredients || [];
+
         modalContent.innerHTML = `
-            <div class="p-4 sm:p-6">
-                <div class="flex justify-between items-start mb-4">
-                    <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 leading-tight flex-1 pr-4">${recipe.name}</h2>
-                    <button id="modal-close-btn" class="text-2xl sm:text-3xl font-light text-gray-500 hover:text-gray-800 p-1 flex-shrink-0">&times;</button>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <button id="modal-close-btn" class="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        <span class="text-sm font-medium">Back to Recipes</span>
+                    </button>
+                    <span class="text-white/50 text-sm">Recipe Collector</span>
                 </div>
-                <img src="${recipe.imageUrl || 'https://placehold.co/600x400/e2e8f0/cbd5e0?text=Food'}" alt="${recipe.name}" class="w-full h-48 sm:h-64 object-cover rounded-lg mb-4">
-                <p class="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">${recipe.description}</p>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 text-center">
-                    <div class="bg-gray-50 p-3 rounded-lg border">
-                        <div class="text-xs sm:text-sm text-gray-500">Cuisine</div>
-                        <div class="font-semibold text-sm sm:text-base">${recipe.cuisine}</div>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-lg border">
-                        <div class="text-xs sm:text-sm text-gray-500">Prep Time</div>
-                        <div class="font-semibold text-sm sm:text-base">${recipe.prepTime} mins</div>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-lg border">
-                        <div class="text-xs sm:text-sm text-gray-500">Cook Time</div>
-                        <div class="font-semibold text-sm sm:text-base">${recipe.cookTime} mins</div>
+
+                <!-- Recipe Title Section -->
+                <div class="flex items-start gap-4 mb-8">
+                    <img src="${recipe.imageUrl || 'https://placehold.co/100x100/667eea/white?text=Recipe'}"
+                         alt="${recipe.name}"
+                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0">
+                    <div class="flex-1 min-w-0">
+                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-2">${recipe.name}</h1>
+                        <div class="flex flex-wrap gap-3 text-sm text-white/60">
+                            <span>${recipe.cuisine || 'Other'}</span>
+                            <span>•</span>
+                            <span>${recipe.prepTime || 0} min prep</span>
+                            <span>•</span>
+                            <span>${recipe.cookTime || 0} min cook</span>
+                        </div>
+                        ${recipe.description ? `<p class="text-white/70 mt-3 text-sm sm:text-base leading-relaxed">${recipe.description}</p>` : ''}
                     </div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- Serving Size Control -->
+                <div class="bg-white/10 rounded-2xl p-4 sm:p-6 mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-white font-semibold text-lg">Servings</h3>
+                            <p class="text-white/60 text-sm">Adjust to scale ingredients</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button id="decrease-servings" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white text-xl font-bold transition-colors flex items-center justify-center">−</button>
+                            <span id="servings-display" class="text-2xl font-bold text-white min-w-[3rem] text-center">${currentServings}</span>
+                            <button id="increase-servings" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white text-xl font-bold transition-colors flex items-center justify-center">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Ingredients -->
                     <div>
-                        <h3 class="text-lg sm:text-xl font-semibold mb-3 text-gray-800 border-b border-gray-200 pb-2">Ingredients</h3>
-                        <ul class="list-none space-y-2 text-gray-700 text-sm sm:text-base">
-                            ${recipe.ingredients.map(ing => `<li class="flex items-start"><span class="text-green-500 mr-2">•</span><span>${ing}</span></li>`).join('')}
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-4 pb-2 border-b border-white/20">Ingredients</h2>
+                        <ul id="ingredients-list" class="space-y-3">
+                            ${renderScaledIngredients(recipe.ingredients, originalServings, currentServings)}
                         </ul>
                     </div>
+
+                    <!-- Instructions -->
                     <div>
-                        <h3 class="text-lg sm:text-xl font-semibold mb-3 text-gray-800 border-b border-gray-200 pb-2">Instructions</h3>
-                        <div class="space-y-3 text-gray-700 text-sm sm:text-base leading-relaxed whitespace-pre-line">${recipe.instructions}</div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mb-4 pb-2 border-b border-white/20">Instructions</h2>
+                        <div class="text-white/80 text-base leading-relaxed whitespace-pre-line">${recipe.instructions || 'No instructions available'}</div>
                     </div>
                 </div>
+
+                ${recipe.sourceUrl ? `
+                    <div class="mt-8 pt-6 border-t border-white/20 text-center">
+                        <a href="${recipe.sourceUrl}" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm">View original recipe →</a>
+                    </div>
+                ` : ''}
             </div>
         `;
+
         recipeModal.classList.remove('hidden');
-        setTimeout(() => modalContent.classList.add('modal-enter-active'), 10);
+        document.body.style.overflow = 'hidden';
+
+        // Event listeners for serving controls
         document.getElementById('modal-close-btn').addEventListener('click', closeRecipeModal);
+        document.getElementById('decrease-servings').addEventListener('click', () => updateServings(-1));
+        document.getElementById('increase-servings').addEventListener('click', () => updateServings(1));
+    }
+
+    function updateServings(delta) {
+        const newServings = currentServings + delta;
+        if (newServings >= 1 && newServings <= 99) {
+            currentServings = newServings;
+            document.getElementById('servings-display').textContent = currentServings;
+            document.getElementById('ingredients-list').innerHTML = renderScaledIngredients(currentRecipeIngredients, originalServings, currentServings);
+        }
+    }
+
+    function parseServings(servingsStr) {
+        if (!servingsStr) return null;
+        const match = String(servingsStr).match(/(\d+)/);
+        return match ? parseInt(match[1]) : null;
+    }
+
+    function renderScaledIngredients(ingredients, origServings, newServings) {
+        if (!ingredients || ingredients.length === 0) {
+            return '<li class="text-white/60">No ingredients listed</li>';
+        }
+        return ingredients.map(ing => {
+            const scaled = scaleIngredient(ing, origServings, newServings);
+            return `<li class="flex items-start text-white/80 text-base">
+                <span class="text-green-400 mr-3 mt-1">•</span>
+                <span>${scaled}</span>
+            </li>`;
+        }).join('');
     }
     
     function closeRecipeModal() {
-        modalContent.classList.remove('modal-enter-active');
-        modalContent.classList.add('modal-exit-active');
-        setTimeout(() => {
-            recipeModal.classList.add('hidden');
-            modalContent.classList.remove('modal-exit-active');
-        }, 300);
+        recipeModal.classList.add('hidden');
+        document.body.style.overflow = '';
     }
 
     function handleFilterClick(e) {
@@ -685,34 +866,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         savePlanToLocalStorage();
     });
 
-    // Manual refresh button
-    document.getElementById('refresh-recipes-btn').addEventListener('click', async () => {
-        const refreshBtn = document.getElementById('refresh-recipes-btn');
-        const originalText = refreshBtn.innerHTML;
-        refreshBtn.innerHTML = '⏳ Loading...';
-        refreshBtn.disabled = true;
-
-        // Force fetch new recipes regardless of week
-        const newRecipes = await fetchVegetarianRecipes();
-        if (newRecipes.length > 0) {
-            saveWeeklyRecipes(newRecipes);
-            allRecipes = [...window.initialRecipes, ...loadRecipesFromLocalStorage(), ...newRecipes];
-            renderRecipes();
-
-            refreshBtn.innerHTML = '✅ Done!';
-            setTimeout(() => {
-                refreshBtn.innerHTML = originalText;
-                refreshBtn.disabled = false;
-            }, 2000);
-        } else {
-            refreshBtn.innerHTML = '❌ Failed';
-            setTimeout(() => {
-                refreshBtn.innerHTML = originalText;
-                refreshBtn.disabled = false;
-            }, 2000);
-        }
-    });
-    
     // Shopping list event listeners
     generateShoppingListBtn.addEventListener('click', generateShoppingList);
     clearShoppingListBtn.addEventListener('click', clearShoppingList);
@@ -731,8 +884,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
 
-    recipeModal.addEventListener('click', (e) => {
-        if (e.target === recipeModal) {
+    // Close recipe modal on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !recipeModal.classList.contains('hidden')) {
             closeRecipeModal();
         }
     });
@@ -781,11 +935,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Recipe selection event listener
     recipeList.addEventListener('click', (e) => {
         const recipeCard = e.target.closest('[data-recipe-id]');
-        if (recipeCard && !e.target.classList.contains('view-btn')) {
-            selectRecipe(recipeCard.dataset.recipeId);
-        }
-        if (e.target.classList.contains('view-btn')) {
-            showRecipeModal(e.target.dataset.recipeId);
+        if (recipeCard) {
+            const recipeId = e.target.classList.contains('view-btn')
+                ? e.target.dataset.recipeId
+                : recipeCard.dataset.recipeId;
+            showRecipeModal(recipeId);
         }
     });
     
@@ -967,6 +1121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 description: importedRecipeData.description || '',
                 prepTime: importedRecipeData.prepTime || 0,
                 cookTime: importedRecipeData.cookTime || 0,
+                servings: importedRecipeData.servings || '4',
                 ingredients: importedRecipeData.ingredients || [],
                 instructions: importedRecipeData.instructions || '',
                 imageUrl: importedRecipeData.imageUrl || 'https://placehold.co/400x300/667eea/white?text=Imported+Recipe',
@@ -1008,7 +1163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const link = document.createElement('a');
         link.href = url;
-        link.download = `veggiplan-recipes-${new Date().toISOString().split('T')[0]}.json`;
+        link.download = `recipe-collector-${new Date().toISOString().split('T')[0]}.json`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -1069,7 +1224,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 importJsonFile.value = '';
 
             } catch (error) {
-                alert(`❌ Failed to import: ${error.message}\n\nMake sure the file is a valid VeggiPlan export.`);
+                alert(`❌ Failed to import: ${error.message}\n\nMake sure the file is a valid Recipe Collector export.`);
                 importJsonFile.value = '';
             }
         };

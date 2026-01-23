@@ -4,40 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-VeggiPlan is a vegetarian meal planning web application built with vanilla HTML, CSS, and JavaScript. It allows users to plan weekly meals by browsing recipes from multiple cuisines and organizing them into a weekly planner using drag-and-drop functionality.
+Recipe Collector is a recipe management web application built with vanilla HTML, CSS, and JavaScript. It allows users to collect recipes from URLs, view them in a distraction-free full-screen layout, and adjust serving sizes with automatic ingredient scaling.
 
 ## Architecture and Structure
 
-This is a single-page application with all code contained in three main files:
+This is a single-page application with all code contained in these files:
 - `index.html` - Main HTML structure and JavaScript application
-- `recipes.js` - Recipe database with 74 mushroom-free vegetarian recipes loaded via script tag
-- `README.md` - Basic project description
+- `recipes.js` - Template for initial recipes (currently empty)
+- `worker-recipe-scraper.js` - Cloudflare Worker for scraping recipes from URLs
 
-### Key Components
+### Key Features
 
-**Recipe Management:**
-- Initial recipe database loaded from `recipes.js` as `window.initialRecipes`
-- Dynamic recipe addition via modal form
-- Local storage persistence for user-added recipes
-- Filter system by cuisine type (Indian, Italian, Mexican, Mediterranean, Thai, etc.)
+**Recipe Collection:**
+- Import recipes from URLs (uses Cloudflare Worker to scrape recipe data)
+- Manual recipe addition via form
+- Local storage persistence for all recipes
+- Filter by cuisine type
+- Export/Import recipes as JSON
 
-**Weekly Planner:**
-- Drag-and-drop interface for meal planning
-- 7-day grid with Lunch/Dinner slots
-- Local storage persistence for meal plans
-- Random plan generation feature
+**Full-Screen Recipe View:**
+- Distraction-free recipe detail view
+- Small thumbnail image (not prominent)
+- Large, readable text for ingredients and instructions
+- Keyboard navigation (Escape to close)
 
-**Shopping List:**
-- Automatic shopping list generation from weekly meal plan
-- Ingredient grouping and deduplication
-- Checkable items with progress tracking
-- Local storage persistence for shopping list state
+**Serving Size Adjustment:**
+- Customizable serving sizes with +/- controls
+- Automatic ingredient scaling based on serving ratio
+- Handles fractions (½, ¼, ⅓, etc.), decimals, and ranges
+- Smart formatting of scaled quantities
 
 **Technology Stack:**
 - Vanilla JavaScript (ES6+)
 - TailwindCSS via CDN for styling
-- HTML5 drag-and-drop API
 - LocalStorage for data persistence
+- Cloudflare Worker for recipe scraping
 - No build process or package manager
 
 ## Development Workflow
@@ -60,29 +61,41 @@ Since this is a static web application with no build process:
     description: string,
     prepTime: number,
     cookTime: number,
+    servings: string,        // e.g., "4", "4 servings"
     ingredients: string[],
     instructions: string,
-    imageUrl: string
+    imageUrl: string,
+    imported: boolean,       // true if imported from URL
+    sourceUrl: string        // original recipe URL
 }
 ```
 
 **Local Storage Keys:**
-- `mealPlannerUserRecipes` - User-added recipes (ID > 1000)
-- `mealPlannerPlan` - Weekly meal plan assignments
-- `mealPlannerShoppingList` - Shopping list items with checked state
+- `mealPlannerUserRecipes` - All user recipes (imported and manual)
 
 **Key Functions:**
-- `renderRecipes()` - Displays filtered recipe list
-- `renderPlanner()` - Updates weekly planner grid
-- `generateShoppingList()` - Creates shopping list from weekly plan
-- `renderShoppingList()` - Updates shopping list display
-- Drag-and-drop event handlers for meal assignment
-- Modal management for recipe viewing/adding
+- `renderRecipes()` - Displays filtered recipe grid
+- `showRecipeModal()` - Opens full-screen recipe view
+- `scaleIngredient()` - Scales ingredient quantities based on serving ratio
+- `parseServings()` - Extracts numeric serving count from string
+- `formatQuantity()` - Formats scaled numbers with fractions
+
+**Ingredient Scaling:**
+- Parses quantities including fractions (1/2, ½), decimals, and ranges (2-3)
+- Scales proportionally based on original/new serving ratio
+- Formats output with unicode fractions for readability
+
+## Recipe Scraper Worker
+
+The Cloudflare Worker (`worker-recipe-scraper.js`) extracts recipe data from URLs:
+- Deployed at: `recipe-scraper.bhetariah.workers.dev`
+- Extracts JSON-LD structured data (primary method)
+- Falls back to microdata parsing
+- Returns normalized recipe object
 
 ## Important Notes
 
-- All recipes have placeholder images from placehold.co
-- No server-side functionality - purely client-side
-- Recipe database is centralized in `recipes.js` and loaded as `window.initialRecipes`
-- User-added recipes persist in localStorage only
+- No server-side functionality - purely client-side (except scraper worker)
+- User recipes persist in localStorage only
 - No authentication or user management system
+- Meal planning features are hidden but code is retained
